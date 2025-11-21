@@ -1,0 +1,1119 @@
+/* ==================== Toggle Component ==================== */
+.toggle-wrapper {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.toggle-track {
+  width: 44px;
+  height: 24px;
+  border-radius: 20px;
+  position: relative;
+  transition: background-color 0.2s;
+}
+
+.toggle-track-on {
+  background: #9BA7BA;
+}
+
+.toggle-track-off {
+  background: #E0E0E0;
+}
+
+.toggle-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FFF;
+  position: absolute;
+  top: 2px;
+  transition: left 0.2s;
+}
+
+.toggle-thumb-on {
+  left: 22px;
+}
+
+.toggle-thumb-off {
+  left: 2px;
+}
+
+/* ==================== Radio Component ==================== */
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* ==================== Badge Component ==================== */
+.badge {
+  display: flex;
+  padding: 4px 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  white-space: nowrap;
+}
+
+.badge-active {
+  border: 1px solid #366FE3;
+  background: #F2F6FF;
+  color: #366FE3;
+}
+
+.badge-inactive {
+  border: 1px solid #E38936;
+  background: #FFFAF4;
+  color: #E38936;
+}
+
+/* ==================== Master Menu Card ==================== */
+.master-menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 0 0 6px 0;
+}
+
+.master-menu-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.master-menu-card-title-bar {
+  display: flex;
+  padding-left: 16px;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid #556071;
+  background: #556071;
+}
+
+.master-menu-card-title {
+  flex: 1 0 0;
+  color: #F5F5F5;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.4px;
+}
+
+.master-menu-card-toggle {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 6px 0 0;
+  border-left: 1px solid #69727F;
+  background: #474F5C;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.master-menu-card-actions {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+}
+
+.master-menu-save-btn {
+  display: flex;
+  height: 44px;
+  padding: 10px 24px;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  border-top: 1px solid #69727F;
+  background: #474F5C;
+  color: #F0F2F5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  cursor: pointer;
+}
+
+.master-menu-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 0 0 6px 6px;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+/* ==================== Menu Description ==================== */
+.master-menu-description {
+  display: flex;
+  padding: 24px 16px;
+  align-items: center;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.master-menu-description-text {
+  flex: 1 0 0;
+  color: #333;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: -0.375px;
+  margin: 0;
+}
+
+/* ==================== Menu Component Item ==================== */
+.menu-component-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-bottom: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.menu-component-item {
+  display: flex;
+  height: 62px;
+  padding: 10px;
+  align-items: center;
+  align-self: stretch;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.menu-component-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+}
+
+.menu-component-title {
+  flex: 1 0 0;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-component-drag {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-component-more {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.menu-component-search {
+  display: flex;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.btn-search {
+  display: flex;
+  width: 90px;
+  height: 42px;
+  padding: 9px 18px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid #CED7E5;
+  background: #FFF;
+  color: #9BA7BA;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.menu-component-input-disabled {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #F5F5F5;
+}
+
+.menu-component-input-text {
+  color: #999;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-component-code {
+  display: flex;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.menu-component-code-text {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-component-field {
+  display: flex;
+  padding: 10px 16px;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.menu-component-field-label {
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.375px;
+}
+
+.menu-component-field-label-text {
+  color: #666;
+}
+
+.menu-component-field-label-required {
+  color: #F00;
+}
+
+.menu-component-input {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.menu-component-input-field {
+  flex: 1 0 0;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.menu-component-radio-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ==================== Option Set Item ==================== */
+.option-set-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-bottom: 1px solid #EBEBEB;
+}
+
+.option-set-header {
+  display: flex;
+  height: 62px;
+  padding: 10px 16px;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  border: 1px solid #EBEBEB;
+}
+
+.option-set-title {
+  flex: 1 0 0;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.4px;
+}
+
+.option-set-name-field {
+  display: flex;
+  padding: 10px 16px;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.option-set-label {
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.option-set-label-text {
+  color: #666;
+}
+
+.option-set-label-required {
+  color: #F00;
+}
+
+.option-set-input {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.option-set-input-field {
+  flex: 1 0 0;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.option-set-toggles {
+  display: flex;
+  height: 64px;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 18px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.option-set-toggle-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option-set-toggle-label {
+  color: #666;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.375px;
+}
+
+.option-set-order-field {
+  display: flex;
+  padding: 10px 16px;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+/* ==================== Option Item ==================== */
+.option-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-bottom: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.option-item-header {
+  display: flex;
+  height: 62px;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.option-item-title {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.375px;
+}
+
+.option-item-drag {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-item-more {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.option-item-search {
+  display: flex;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.option-item-input {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.option-item-input-text {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option-item-input-field {
+  flex: 1 0 0;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.option-item-code {
+  display: flex;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.option-item-code-text {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option-item-field {
+  display: flex;
+  padding: 10px 16px;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.option-item-label-text {
+  color: #666;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.375px;
+}
+
+.option-item-controls {
+  display: flex;
+  height: 64px;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 18px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.option-item-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option-item-control-label {
+  color: #888;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.375px;
+}
+
+/* ==================== Option Description ==================== */
+.master-menu-option-description {
+  display: flex;
+  padding: 24px 16px;
+  flex-direction: column;
+  gap: 12px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.master-menu-option-description-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.master-menu-option-description-title {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%;
+  letter-spacing: -0.375px;
+  margin: 0;
+}
+
+.master-menu-option-description-text {
+  color: #333;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: -0.375px;
+  margin: 0;
+}
+
+.master-menu-option-divider {
+  height: 1px;
+  align-self: stretch;
+  background: #EBEBEB;
+}
+
+/* ==================== Category Selector ==================== */
+.category-selector-wrapper {
+  display: flex;
+  padding: 24px 16px;
+  flex-direction: column;
+  gap: 10px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.category-selector-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.category-selector-title {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%;
+  letter-spacing: -0.375px;
+}
+
+.category-selector-description {
+  color: #333;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: -0.375px;
+  white-space: pre-line;
+}
+
+.category-selector-field {
+  display: flex;
+  height: 62px;
+  padding: 10px 16px;
+  align-items: center;
+  align-self: stretch;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.category-selector-label {
+  flex: 1 0 0;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.375px;
+}
+
+.category-selector-label-text {
+  color: #222;
+}
+
+.category-selector-label-required {
+  color: #F00;
+}
+
+.category-selector-actions {
+  display: flex;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.category-selector-select {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  cursor: pointer;
+}
+
+.category-selector-select-text {
+  flex: 1 0 0;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.category-selector-add-btn {
+  display: flex;
+  height: 42px;
+  padding: 9px 18px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid #CED7E5;
+  background: #FFF;
+  color: #9BA7BA;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  cursor: pointer;
+}
+
+.category-selector-list {
+  display: flex;
+  padding: 6px 16px;
+  flex-direction: column;
+  gap: 12px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.category-selector-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.category-selector-item-text {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-selector-item-text-inactive {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.category-selector-item-inactive {
+  color: #E38936;
+}
+
+.category-selector-remove-btn {
+  display: flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ==================== Store Description ==================== */
+.master-menu-store-description {
+  display: flex;
+  padding: 24px 20px;
+  align-items: center;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+}
+
+.master-menu-store-description-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 0 0;
+}
+
+.master-menu-store-description-title {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 160%;
+  letter-spacing: -0.375px;
+  margin: 0;
+}
+
+.master-menu-store-description-text {
+  color: #333;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: -0.375px;
+  margin: 0;
+}
+
+/* ==================== Store Selector ==================== */
+.master-menu-store-selector {
+  display: flex;
+  padding: 10px 16px;
+  flex-direction: column;
+  gap: 10px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+  border-radius: 0 0 6px 6px;
+}
+
+.master-menu-store-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.master-menu-store-select {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  cursor: pointer;
+}
+
+.master-menu-store-select-text {
+  flex: 1 0 0;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.master-menu-store-add-btn {
+  display: flex;
+  height: 42px;
+  padding: 9px 18px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid #CED7E5;
+  background: #FFF;
+  color: #9BA7BA;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  cursor: pointer;
+}
+
+.master-menu-store-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.master-menu-store-save-btn-active {
+  display: flex;
+  height: 42px;
+  padding: 9px 14px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 6px;
+  background: #C6CDD6;
+  color: #FFF;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  border: none;
+  cursor: pointer;
+}
+
+.master-menu-store-save-btn {
+  display: flex;
+  height: 42px;
+  padding: 9px 14px;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #CED7E5;
+  background: #FFF;
+  color: #9BA7BA;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  cursor: pointer;
+}
+
+.master-menu-store-list {
+  display: flex;
+  padding: 6px 0;
+  flex-direction: column;
+  gap: 12px;
+  align-self: stretch;
+}
+
+.master-menu-store-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.master-menu-store-item-text {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.master-menu-store-remove-btn {
+  display: flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
