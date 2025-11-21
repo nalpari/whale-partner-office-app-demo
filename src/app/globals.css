@@ -1703,7 +1703,7 @@ body {
 
 .side-menu-container {
   position: relative;
-  width: 375px;
+  width: 100%;
   height: 100%;
   background: #282F37;
   overflow-y: auto;
