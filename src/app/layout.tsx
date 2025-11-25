@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AiIconWrapper from "@/components/AiIconWrapper";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,6 +18,7 @@ export default function RootLayout({
         className={`antialiased`}
       >
         {children}
+        <AiIconWrapper />
       </body>
     </html>
   );
