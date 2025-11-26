@@ -1,11 +1,14 @@
+"use client";
+
 import Header from "@/components/Header";
 import Select from "@/components/Select";
 import Breadcrumb from "@/components/Breadcrumb";
 import SearchResultToggle from "@/components/SearchResultToggle";
+import SearchFilter from "@/components/SearchFilter";
 import Button from "@/components/Button";
 import PerPageSelect from "@/components/PerPageSelect";
 import TemplateCard from "@/components/TemplateCard";
-import Pagination from "@/components/Pagination";
+import PaginationWrapper from "@/components/PaginationWrapper";
 
 const mockData = [
   {
@@ -63,7 +66,7 @@ export default function TemplatesPage() {
       </div>
 
       <div className="page-content">
-        <SearchResultToggle count={128} />
+        <SearchResultToggle count={128} defaultFilter={<SearchFilter />} />
 
         <div className="tables-section">
           <div className="tables-header">
@@ -79,9 +82,7 @@ export default function TemplatesPage() {
               <TemplateCard data={mockData[3]} />
             </div>
 
-            <div className="pagination-wrapper">
-              <Pagination totalPages={5} currentPage={1} />
-            </div>
+            <PaginationWrapper totalPages={5} currentPage={1} />
           </div>
         </div>
       </div>

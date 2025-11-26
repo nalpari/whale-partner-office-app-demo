@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface PaginationProps {
   totalPages?: number;
@@ -10,6 +10,10 @@ interface PaginationProps {
 
 export default function Pagination({ totalPages = 5, currentPage: initialPage = 1, onPageChange }: PaginationProps) {
   const [currentPage, setCurrentPage] = useState(initialPage);
+
+  useEffect(() => {
+    setCurrentPage(initialPage);
+  }, [initialPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

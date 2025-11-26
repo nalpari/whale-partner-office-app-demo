@@ -35,6 +35,11 @@ export default function Home() {
       path: "/master-menu-management",
       description: "세트 메뉴, 옵션, 카테고리 설정",
     },
+    {
+      name: "직원 정보 관리",
+      path: "/employee-management",
+      description: "직원 기본 정보 및 경력, 자격증 관리",
+    },
   ];
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import SideMenu from "./SideMenu";
 
 export default function Header() {
@@ -9,7 +10,7 @@ export default function Header() {
   return (
     <>
       <header className="header">
-        <div className="logo-container">
+        <Link href="/" className="logo-container" style={{ textDecoration: 'none', cursor: 'pointer' }}>
           <div className="logo-wrapper">
             <svg className="whale-icon" width="41" height="31" viewBox="0 0 41 31" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_617_23194)">
@@ -42,7 +43,7 @@ export default function Header() {
             <span className="brand-title">whale ERP</span>
             <span className="brand-subtitle">management System</span>
           </div>
-        </div>
+        </Link>
         <div
           className="menu-button"
           onClick={() => setIsSideMenuOpen(!isSideMenuOpen)}

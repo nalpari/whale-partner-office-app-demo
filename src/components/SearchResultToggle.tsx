@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import SearchFilter from "./SearchFilter";
+import { useState, ReactNode } from "react";
 
 interface SearchResultToggleProps {
   count: number;
+  children?: ReactNode;
+  defaultFilter?: ReactNode;
 }
 
-export default function SearchResultToggle({ count }: SearchResultToggleProps) {
+export default function SearchResultToggle({ 
+  count, 
+  children,
+  defaultFilter 
+}: SearchResultToggleProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -37,7 +42,7 @@ export default function SearchResultToggle({ count }: SearchResultToggleProps) {
           </div>
         </div>
       </div>
-      {isExpanded && <SearchFilter />}
+      {isExpanded && (children || defaultFilter)}
     </div>
   );
 }

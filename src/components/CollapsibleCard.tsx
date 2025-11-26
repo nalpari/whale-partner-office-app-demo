@@ -106,7 +106,9 @@ export default function CollapsibleCard({
               <div
                 key={index}
                 className={
-                  index === 0
+                  data.length === 1
+                    ? "collapsible-card-row-only"
+                    : index === 0
                     ? "collapsible-card-row-first"
                     : index === data.length - 1
                     ? "collapsible-card-row-last"
