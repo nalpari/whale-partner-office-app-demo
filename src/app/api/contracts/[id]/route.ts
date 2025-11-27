@@ -20,7 +20,6 @@ export async function GET(
     }
 
     // 근로 계약 상세 정보 조회 (관련 테이블 포함)
-    // 현재 DB 스키마에서 FK 관계가 설정된 테이블만 조인
     const { data, error } = await supabase
       .from('employment_contracts')
       .select(`
@@ -44,6 +43,14 @@ export async function GET(
           annual_salary,
           monthly_salary,
           hourly_wage
+        ),
+        contract_work_schedules (
+          id,
+          day_type,
+          work_start_time,
+          work_end_time,
+          break_start_time,
+          break_end_time
         )
       `)
       .eq('id', contractId)
@@ -63,7 +70,14 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ data });
+    // 프론트엔드 호환성을 위해 데이터 매핑
+    const resultData = {
+      ...data,
+      // 프론트엔드에서 사용하는 필드명으로 매핑
+      employment_contract_work_hours: data.contract_work_schedules,
+    };
+
+    return NextResponse.json({ data: resultData });
   } catch (error) {
     return NextResponse.json(
       { error: 'Internal server error' },

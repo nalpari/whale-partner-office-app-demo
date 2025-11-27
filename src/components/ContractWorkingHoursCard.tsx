@@ -148,13 +148,6 @@ export default function ContractWorkingHoursCard() {
             </svg>
           </button>
         </div>
-        {isOpen && (
-          <div className="operating-hours-card-actions">
-            <button className="operating-hours-card-save-btn" type="button">
-              <div className="operating-hours-card-save-label">저장</div>
-            </button>
-          </div>
-        )}
       </div>
       {isOpen && (
         <div className="operating-hours-card-body">

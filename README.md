@@ -77,29 +77,18 @@ whale-partner-office-app-demo/
 
 ### 필수 요구사항
 - Node.js 20 이상
+- pnpm (권장 패키지 매니저)
 
 ### 설치
 
 ```bash
-npm install
-# 또는
-yarn install
-# 또는
 pnpm install
-# 또는
-bun install
 ```
 
 ### 개발 서버 실행
 
 ```bash
-npm run dev
-# 또는
-yarn dev
-# 또는
 pnpm dev
-# 또는
-bun dev
 ```
 
 브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 결과를 확인하세요.
@@ -109,14 +98,14 @@ bun dev
 ### 프로덕션 빌드
 
 ```bash
-npm run build
-npm start
+pnpm build
+pnpm start
 ```
 
 ### 코드 검사
 
 ```bash
-npm run lint
+pnpm lint
 ```
 
 ## ⚙️ 주요 설정

@@ -1,0 +1,654 @@
+/**
+ * Side Menu Styles
+ * 사이드 메뉴, 네비게이션, 사용자 프로필 스타일
+ */
+
+/* ========================================
+   Side Menu Overlay & Container
+   ======================================== */
+.side-menu-overlay {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: calc(100vh - 64px);
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-start;
+  animation: fadeIn 0.3s ease-out;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.side-menu-overlay-closing {
+  animation: fadeOut 0.4s ease-out forwards;
+}
+
+.side-menu-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #282F37;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  animation: slideIn 0.3s ease-out;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.side-menu-container::-webkit-scrollbar {
+  display: none;
+}
+
+.side-menu-container.side-menu-closing {
+  animation: slideOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.side-menu-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  min-height: 100%;
+}
+
+.side-menu-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  align-self: stretch;
+  background: #282F37;
+}
+
+/* ========================================
+   Service Section
+   ======================================== */
+.service-section {
+  display: flex;
+  padding: 32px 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
+  background: #36404B;
+}
+
+.service-select {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  margin: 0 42px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #282F37;
+  background: #FFF;
+  cursor: pointer;
+}
+
+.service-select-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+  overflow: hidden;
+  color: #282F37;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+/* ========================================
+   User Section
+   ======================================== */
+.user-section {
+  display: flex;
+  padding: 32px 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  background: #36404B;
+  border-top: 1px solid #000;
+}
+
+.user-info-wrapper {
+  display: flex;
+  padding: 0 42px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  align-self: stretch;
+}
+
+.user-info-wrapper .user-profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+}
+
+.user-avatar-wrapper {
+  width: 48px;
+  height: 48px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.user-avatar-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 36.221px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  object-fit: cover;
+}
+
+.user-text-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.user-role {
+  color: #A3A7AC;
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: -0.055px;
+  text-transform: uppercase;
+}
+
+.user-store-name {
+  color: #A3A7AC;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.375px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-actions {
+  display: flex;
+  padding: 0 42px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.user-btn-outline {
+  display: flex;
+  height: 39px;
+  padding: 9px 18px;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #CED7E5;
+  background: transparent;
+  color: #CED7E5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.35px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.user-btn-outline-small {
+  display: flex;
+  width: 94px;
+  height: 39px;
+  padding: 9px 18px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid #CED7E5;
+  background: transparent;
+  color: #CED7E5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.35px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.user-btn-filled {
+  display: flex;
+  width: 68px;
+  height: 38px;
+  padding: 9px 24px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  background: #6A7E96;
+  color: #F0F2F5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.35px;
+  border: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* ========================================
+   Navigation
+   ======================================== */
+.side-menu-nav {
+  display: flex;
+  padding: 0 42px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  flex: 1;
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.nav-item-main {
+  display: flex;
+  height: 62px;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 6px;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.nav-item-main-collapsed {
+  display: flex;
+  height: 62px;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 6px;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.nav-item-main-folder-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.nav-item-main-label {
+  flex: 1 0 0;
+  color: #F0F2F5;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.5px;
+}
+
+.nav-item-main-label-inactive {
+  flex: 1 0 0;
+  color: #A3A7AC;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.5px;
+}
+
+.nav-item-main-icon {
+  width: 8px;
+  height: 5px;
+  transition: transform 0.3s ease;
+}
+
+.nav-item-main-icon-up {
+  transform: rotate(180deg);
+}
+
+.nav-item-main-icon-inactive {
+  width: 8px;
+  height: 5px;
+}
+
+.nav-submenu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  padding-left: 16px;
+}
+
+.nav-item-sub {
+  display: flex;
+  height: 40px;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  align-self: stretch;
+  color: #A3A7AC;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.38px;
+  cursor: pointer;
+}
+
+.nav-item-sub-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.nav-item-sub-link {
+  display: flex;
+  height: 40px;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  align-self: stretch;
+  color: #A3A7AC;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.38px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.nav-item-sub-link:hover {
+  color: #F0F2F5;
+}
+
+.nav-item-sub-link:hover .nav-item-sub-icon path {
+  fill: #F0F2F5;
+}
+
+.nav-item-sub-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.nav-item-sub-active {
+  display: flex;
+  height: 48px;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  color: #F0F2F5;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.45px;
+  cursor: pointer;
+}
+
+.nav-submenu-third {
+  display: flex;
+  padding: 0 16px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.nav-item-third {
+  display: flex;
+  height: 42px;
+  flex-direction: column;
+  justify-content: center;
+  color: #A3A7AC;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.4px;
+  cursor: pointer;
+}
+
+.nav-item-third-active {
+  display: flex;
+  height: 42px;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  color: #F0F2F5;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.4px;
+  cursor: pointer;
+}
+
+/* ========================================
+   User Profile (Standalone)
+   ======================================== */
+.user-profile {
+  display: flex;
+  padding: 32px 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
+  background: #36404B;
+  position: relative;
+}
+
+.user-profile-content {
+  display: flex;
+  padding: 0 42px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  position: relative;
+}
+
+.user-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  align-self: stretch;
+  position: relative;
+}
+
+.user-profile-info-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.user-profile-avatar {
+  width: 48px;
+  height: 48px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.user-profile-avatar-bg {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  fill: #EBAE9B;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.user-profile-avatar-img {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 36.221px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  object-fit: cover;
+}
+
+.user-profile-text {
+  display: flex;
+  height: 30px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+}
+
+.user-profile-role {
+  align-self: stretch;
+  color: #A3A7AC;
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: -0.055px;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.user-profile-details {
+  color: #A3A7AC;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.375px;
+  position: relative;
+}
+
+.user-profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  position: relative;
+}
+
+.user-profile-btn-outline {
+  display: flex;
+  height: 39px;
+  padding: 9px 18px;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #CED7E5;
+  background: transparent;
+  color: #CED7E5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.35px;
+  cursor: pointer;
+  position: relative;
+}
+
+.user-profile-btn-narrow {
+  width: 94px;
+  flex: 0 0 auto;
+}
+
+.user-profile-btn-filled {
+  display: flex;
+  width: 68px;
+  height: 38px;
+  padding: 9px 24px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  background: #6A7E96;
+  border: none;
+  color: #F0F2F5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.35px;
+  cursor: pointer;
+  position: relative;
+}

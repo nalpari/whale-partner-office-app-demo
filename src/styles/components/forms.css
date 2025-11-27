@@ -1,0 +1,806 @@
+/**
+ * Form Styles
+ * 폼 필드, 입력, 라디오, 체크박스, 토글 스타일
+ */
+
+/* ========================================
+   Select Components
+   ======================================== */
+.select-container {
+  display: flex;
+  height: 48px;
+  padding: 0 8px 0 18px;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 100px;
+  border: 1px solid #EBEBEB;
+  background: #F5F5F5;
+  position: relative;
+}
+
+.select-label {
+  flex: 1 0 0;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.4px;
+  position: relative;
+}
+
+.select-button {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 35px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+}
+
+.select-icon {
+  display: flex;
+  width: 32px;
+  height: 32px;
+}
+
+/* ========================================
+   Form Field Rows
+   ======================================== */
+.form-field-row {
+  display: flex;
+  padding-bottom: 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+  border-bottom: 1px solid #EEE;
+}
+
+.form-field-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.form-field-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-self: stretch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.form-field-label-text {
+  color: #888;
+}
+
+.form-field-label-required {
+  color: #F00;
+}
+
+.form-field-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.form-field-input {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.form-field-input-disabled {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #F5F5F5;
+}
+
+.form-field-input-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.form-field-input-text-disabled {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #999;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.form-field-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.form-field-tooltip {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-field-tooltip-icon {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-field-tooltip-text {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: #6A7E96;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+  letter-spacing: -0.35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-field-description {
+  align-self: stretch;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.35px;
+}
+
+/* ========================================
+   Radio Group
+   ======================================== */
+.radio-group-container {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1 0 0;
+}
+
+.radio-group-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.radio-button-wrapper {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.radio-button {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-visual {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  aspect-ratio: 1/1;
+  border-radius: 24px;
+  border: 1px solid #E1E3E6;
+  background: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-visual-checked {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  aspect-ratio: 1/1;
+  border-radius: 24px;
+  border: 2px solid #6A7E96;
+  background: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-dot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  background: #6A7E96;
+}
+
+.radio-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #999;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.radio-label-active {
+  color: #222;
+}
+
+/* ========================================
+   Toggle Switch
+   ======================================== */
+.toggle-wrapper {
+  display: flex;
+  width: 44px;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.toggle-track-on {
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #9BA7BA;
+  position: relative;
+}
+
+.toggle-track-off {
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #E0E0E0;
+  position: relative;
+}
+
+.toggle-thumb-on {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #FFF;
+  position: absolute;
+  left: 22px;
+  top: 2px;
+  transition: left 0.2s;
+}
+
+.toggle-thumb-off {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #FFF;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  transition: left 0.2s;
+}
+
+/* ========================================
+   Info Tooltip
+   ======================================== */
+.info-tooltip {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-tooltip-icon {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1/1;
+  border-radius: 100px;
+  border: 1px solid #6A7E96;
+  background: #FFF;
+}
+
+.info-tooltip-text {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: #6A7E96;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+  letter-spacing: -0.35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================================
+   Input Component
+   ======================================== */
+.input-field {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.input-field-disabled {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #F5F5F5;
+}
+
+.input-field-error {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #F00;
+  background: #FFF;
+}
+
+.input-native {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.input-native::placeholder {
+  color: #999;
+}
+
+.input-native:disabled {
+  color: #999;
+  background: transparent;
+}
+
+.input-suffix {
+  color: #888;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+
+.input-error-message {
+  color: #F00;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+/* ========================================
+   Checkbox Component
+   ======================================== */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox-container.checkbox-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.checkbox-container.checkbox-inline {
+  flex-shrink: 0;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox-visual {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  border: 1px solid #E1E3E6;
+  background: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox-visual-checked {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  border: 1px solid #6A7E96;
+  background: #6A7E96;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-label {
+  color: #888;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.checkbox-label-active {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.checkbox-group-container {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+/* ========================================
+   Textarea Component
+   ======================================== */
+.textarea-field {
+  display: flex;
+  padding: 12px 16px;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  min-height: 100px;
+}
+
+.textarea-field-disabled {
+  display: flex;
+  padding: 12px 16px;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #F5F5F5;
+  min-height: 100px;
+}
+
+.textarea-native {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  resize: vertical;
+  min-height: 80px;
+  width: 100%;
+}
+
+.textarea-native::placeholder {
+  color: #999;
+}
+
+.textarea-native:disabled {
+  color: #999;
+  background: transparent;
+  resize: none;
+}
+
+/* ========================================
+   Select Dropdown (Editable)
+   ======================================== */
+.select-field {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  cursor: pointer;
+  position: relative;
+}
+
+.select-field-disabled {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #F5F5F5;
+  cursor: not-allowed;
+}
+
+.select-native {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.select-native:disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   Form Grid Layout
+   ======================================== */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .form-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.form-grid-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.form-grid-row-full {
+  grid-column: 1 / -1;
+}
+
+.form-inline-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.form-actions > * {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+}
+
+/* ========================================
+   FormSection Component
+   ======================================== */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #E9E9E9;
+}
+
+.form-section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  background: #474F5C;
+}
+
+.form-section-title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  align-self: stretch;
+}
+
+.form-section-title {
+  display: flex;
+  padding: 12px 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1 0 0;
+  align-self: stretch;
+  color: #FFF;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.45px;
+}
+
+.form-section-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.form-section-actions {
+  display: flex;
+  padding: 8px 16px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  background: #474F5C;
+  border-top: 1px solid #69727F;
+}
+
+.form-section-body {
+  display: flex;
+  padding: 24px 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  background: #FFF;
+}
+
+.form-section-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+}

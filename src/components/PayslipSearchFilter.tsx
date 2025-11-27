@@ -2,67 +2,49 @@
 
 import { useState } from "react";
 
-interface ContractSearchFilterProps {
-  onSearch?: (filters: ContractSearchFilters) => void;
+interface PayslipSearchFilterProps {
+  onSearch?: (filters: PayslipSearchFilters) => void;
   onReset?: () => void;
   onClose?: () => void;
 }
 
-export interface ContractSearchFilters {
+export interface PayslipSearchFilters {
   headquarters: string;
   franchise: string;
   store: string;
   workStatus: string;
   employeeName: string;
-  workDays: string;
   employeeClassification: string;
-  contractClassification: string;
-  contractStatus: string;
-  isElectronic: string;
-  payDayStart: string;
-  payDayEnd: string;
-  contractDateStart: string;
-  contractDateEnd: string;
+  payDateStart: string;
+  payDateEnd: string;
 }
 
-export default function ContractSearchFilter({
+export default function PayslipSearchFilter({
   onSearch,
   onReset,
   onClose,
-}: ContractSearchFilterProps) {
-  const [filters, setFilters] = useState<ContractSearchFilters>({
+}: PayslipSearchFilterProps) {
+  const [filters, setFilters] = useState<PayslipSearchFilters>({
     headquarters: "",
     franchise: "",
     store: "",
     workStatus: "",
     employeeName: "",
-    workDays: "",
     employeeClassification: "",
-    contractClassification: "",
-    contractStatus: "",
-    isElectronic: "",
-    payDayStart: "",
-    payDayEnd: "",
-    contractDateStart: "",
-    contractDateEnd: "",
+    payDateStart: "",
+    payDateEnd: "",
   });
 
   const handleReset = () => {
-    const resetFilters: ContractSearchFilters = {
+    const resetFilters: PayslipSearchFilters = {
       headquarters: "",
       franchise: "",
       store: "",
       workStatus: "",
       employeeName: "",
-      workDays: "",
       employeeClassification: "",
-      contractClassification: "",
-      contractStatus: "",
-      isElectronic: "",
-      payDayStart: "",
-      payDayEnd: "",
-      contractDateStart: "",
-      contractDateEnd: "",
+      payDateStart: "",
+      payDateEnd: "",
     };
     setFilters(resetFilters);
     onReset?.();
@@ -121,7 +103,7 @@ export default function ContractSearchFilter({
         </button>
       </div>
 
-      {/* Row 2: 근무여부, 직원명, 근무요일 */}
+      {/* Row 2: 근무여부, 직원명, 직원 분류 */}
       <div className="filter-row">
         <div className="filter-label">
           <span className="filter-label-text">근무여부</span>
@@ -155,21 +137,6 @@ export default function ContractSearchFilter({
 
       <div className="filter-row">
         <div className="filter-label">
-          <span className="filter-label-text">근무요일</span>
-        </div>
-        <button className="filter-input-select" type="button">
-          <div className="filter-input-text">
-            {filters.workDays || "선택"}
-          </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17 10L12 15L7 10" stroke="#4F4F4F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-      </div>
-
-      {/* Row 3: 직원 분류, 계약 분류, 계약 상태 */}
-      <div className="filter-row">
-        <div className="filter-label">
           <span className="filter-label-text">직원 분류</span>
         </div>
         <button className="filter-input-select" type="button">
@@ -182,64 +149,7 @@ export default function ContractSearchFilter({
         </button>
       </div>
 
-      <div className="filter-row">
-        <div className="filter-label">
-          <span className="filter-label-text">계약 분류</span>
-        </div>
-        <button className="filter-input-select" type="button">
-          <div className="filter-input-text">
-            {filters.contractClassification || "선택"}
-          </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17 10L12 15L7 10" stroke="#4F4F4F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-      </div>
-
-      <div className="filter-row">
-        <div className="filter-label">
-          <span className="filter-label-text">계약 상태</span>
-        </div>
-        <button className="filter-input-select" type="button">
-          <div className="filter-input-text">
-            {filters.contractStatus || "선택"}
-          </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17 10L12 15L7 10" stroke="#4F4F4F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-      </div>
-
-      {/* Row 4: 전자계약 여부, 급여일, 계약일 */}
-      <div className="filter-row">
-        <div className="filter-label">
-          <span className="filter-label-text">전자계약 여부</span>
-        </div>
-        <div className="filter-radio-buttons">
-          <button
-            type="button"
-            className={`filter-radio-btn ${filters.isElectronic === "" || filters.isElectronic === "all" ? "active" : ""}`}
-            onClick={() => setFilters({ ...filters, isElectronic: "all" })}
-          >
-            전체
-          </button>
-          <button
-            type="button"
-            className={`filter-radio-btn ${filters.isElectronic === "electronic" ? "active" : ""}`}
-            onClick={() => setFilters({ ...filters, isElectronic: "electronic" })}
-          >
-            전자계약
-          </button>
-          <button
-            type="button"
-            className={`filter-radio-btn ${filters.isElectronic === "paper" ? "active" : ""}`}
-            onClick={() => setFilters({ ...filters, isElectronic: "paper" })}
-          >
-            서면계약
-          </button>
-        </div>
-      </div>
-
+      {/* Row 3: 급여일 */}
       <div className="filter-row">
         <div className="filter-label">
           <span className="filter-label-text">급여일</span>
@@ -247,7 +157,7 @@ export default function ContractSearchFilter({
         <div className="filter-date-group">
           <button className="filter-input-date" type="button">
             <div className="filter-input-text">
-              {filters.payDayStart || "날짜 선택"}
+              {filters.payDateStart || "날짜 선택"}
             </div>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9.66667 4.5V7.83333M16.3333 4.5V7.83333M5.5 11.1667H20.5M9.66667 14.5H9.675M13 14.5H13.0083M16.3333 14.5H16.3417M9.66667 17.8333H9.675M13 17.8333H13.0083M16.3333 17.8333H16.3417M7.16667 6.16667H18.8333C19.7538 6.16667 20.5 6.91286 20.5 7.83333V19.5C20.5 20.4205 19.7538 21.1667 18.8333 21.1667H7.16667C6.24619 21.1667 5.5 20.4205 5.5 19.5V7.83333C5.5 6.91286 6.24619 6.16667 7.16667 6.16667Z" stroke="#999999" strokeLinecap="round" strokeLinejoin="round"/>
@@ -255,31 +165,7 @@ export default function ContractSearchFilter({
           </button>
           <button className="filter-input-date" type="button">
             <div className="filter-input-text">
-              {filters.payDayEnd || "날짜 선택"}
-            </div>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9.66667 4.5V7.83333M16.3333 4.5V7.83333M5.5 11.1667H20.5M9.66667 14.5H9.675M13 14.5H13.0083M16.3333 14.5H16.3417M9.66667 17.8333H9.675M13 17.8333H13.0083M16.3333 17.8333H16.3417M7.16667 6.16667H18.8333C19.7538 6.16667 20.5 6.91286 20.5 7.83333V19.5C20.5 20.4205 19.7538 21.1667 18.8333 21.1667H7.16667C6.24619 21.1667 5.5 20.4205 5.5 19.5V7.83333C5.5 6.91286 6.24619 6.16667 7.16667 6.16667Z" stroke="#999999" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <div className="filter-row">
-        <div className="filter-label">
-          <span className="filter-label-text">계약일</span>
-        </div>
-        <div className="filter-date-group">
-          <button className="filter-input-date" type="button">
-            <div className="filter-input-text">
-              {filters.contractDateStart || "날짜 선택"}
-            </div>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9.66667 4.5V7.83333M16.3333 4.5V7.83333M5.5 11.1667H20.5M9.66667 14.5H9.675M13 14.5H13.0083M16.3333 14.5H16.3417M9.66667 17.8333H9.675M13 17.8333H13.0083M16.3333 17.8333H16.3417M7.16667 6.16667H18.8333C19.7538 6.16667 20.5 6.91286 20.5 7.83333V19.5C20.5 20.4205 19.7538 21.1667 18.8333 21.1667H7.16667C6.24619 21.1667 5.5 20.4205 5.5 19.5V7.83333C5.5 6.91286 6.24619 6.16667 7.16667 6.16667Z" stroke="#999999" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <button className="filter-input-date" type="button">
-            <div className="filter-input-text">
-              {filters.contractDateEnd || "날짜 선택"}
+              {filters.payDateEnd || "날짜 선택"}
             </div>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9.66667 4.5V7.83333M16.3333 4.5V7.83333M5.5 11.1667H20.5M9.66667 14.5H9.675M13 14.5H13.0083M16.3333 14.5H16.3417M9.66667 17.8333H9.675M13 17.8333H13.0083M16.3333 17.8333H16.3417M7.16667 6.16667H18.8333C19.7538 6.16667 20.5 6.91286 20.5 7.83333V19.5C20.5 20.4205 19.7538 21.1667 18.8333 21.1667H7.16667C6.24619 21.1667 5.5 20.4205 5.5 19.5V7.83333C5.5 6.91286 6.24619 6.16667 7.16667 6.16667Z" stroke="#999999" strokeLinecap="round" strokeLinejoin="round"/>

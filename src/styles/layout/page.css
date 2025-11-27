@@ -1,0 +1,86 @@
+/**
+ * Page Layout Styles
+ * 페이지 컨테이너, 바디, 콘텐츠 레이아웃
+ */
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 24px 16px;
+  background: #FFF;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: calc(100vh - 64px);
+}
+
+.page-container-loading {
+  min-height: calc(100vh - 64px);
+  height: calc(100vh - 64px);
+}
+
+@media (min-width: 640px) {
+  .page-container {
+    padding: 24px 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-container {
+    padding: 32px 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page-container {
+    padding: 40px 32px;
+  }
+}
+
+.page-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.page-title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.page-title {
+  align-self: stretch;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.55px;
+  margin: 0;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+  align-self: stretch;
+}

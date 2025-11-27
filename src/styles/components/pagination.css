@@ -1,0 +1,150 @@
+/**
+ * Pagination Styles
+ * 페이지네이션, 테이블 헤더 스타일
+ */
+
+/* ========================================
+   Tables Section
+   ======================================== */
+.tables-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  align-self: stretch;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tables-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.tables-header > * {
+  flex: 1;
+  max-width: 120px;
+}
+
+/* ========================================
+   Per Page Select
+   ======================================== */
+.per-page-select {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.per-page-value {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.per-page-toggle {
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ========================================
+   Pagination
+   ======================================== */
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  align-self: stretch;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 17px;
+  flex: 1 0 0;
+}
+
+.pagination-arrow {
+  width: 16px;
+  height: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.pagination-numbers {
+  display: flex;
+  height: 38px;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.pagination-number {
+  display: flex;
+  width: 38px;
+  height: 38px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #FBFBFB;
+  color: #999;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination-number-active {
+  display: flex;
+  width: 38px;
+  height: 38px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #E7EEF4;
+  color: #222;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+  cursor: pointer;
+}

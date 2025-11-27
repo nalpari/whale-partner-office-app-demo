@@ -35,6 +35,10 @@ interface ContractData {
     annual_salary: number | null;
     monthly_salary: number | null;
     hourly_wage: number | null;
+  } | {
+    annual_salary: number | null;
+    monthly_salary: number | null;
+    hourly_wage: number | null;
   }[] | null;
 }
 
@@ -94,7 +98,13 @@ export default function ContractCard({ data, isSelected = false }: ContractCardP
 
   // 급여 정보 포맷
   const formatSalary = () => {
-    const salary = data.contract_salaries?.[0];
+    if (!data.contract_salaries) return '-';
+
+    // 배열인 경우 첫 번째 요소 사용, 객체인 경우 그대로 사용
+    const salary = Array.isArray(data.contract_salaries)
+      ? data.contract_salaries[0]
+      : data.contract_salaries;
+
     if (!salary) return '-';
 
     if (salary.annual_salary) {

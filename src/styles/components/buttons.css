@@ -1,0 +1,50 @@
+/**
+ * Button Styles
+ * 버튼 컴포넌트 스타일
+ */
+
+.btn-primary {
+  display: flex;
+  width: auto;
+  height: 42px;
+  padding: 9px 24px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  background: #6A7E96;
+  color: #F0F2F5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  display: flex;
+  width: auto;
+  height: 42px;
+  padding: 9px 24px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  background: #FFF;
+  color: #6A7E96;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  border: 1px solid #6A7E96;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #F5F8FA;
+}

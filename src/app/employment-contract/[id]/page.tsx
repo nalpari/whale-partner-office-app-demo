@@ -24,13 +24,17 @@ interface ContractSalary {
   hourly_wage: number | null;
 }
 
-// 아래 인터페이스들은 현재 DB 스키마에서 FK 관계 미설정
-// 추후 스키마 업데이트 후 활성화 필요
-// interface ContractWorkHour { ... }
-// interface ContractBenefit { ... }
-// interface ContractBonus { ... }
-// interface ContractInsurance { ... }
-// interface ContractFile { ... }
+interface ContractWorkSchedule {
+  id: number;
+  day_type: string;
+  work_start_time: string | null;
+  work_end_time: string | null;
+  break_start_time: string | null;
+  break_end_time: string | null;
+}
+
+// ContractWorkHour는 ContractWorkSchedule로 대체됨 (API 호환성을 위해 유지)
+type ContractWorkHour = ContractWorkSchedule;
 
 interface ContractDetail {
   id: number;
@@ -55,12 +59,8 @@ interface ContractDetail {
   employees: Employee | null;
   stores: { id: number; name: string } | null;
   contract_salaries: ContractSalary | ContractSalary[] | null;
-  // 아래 테이블들은 현재 DB 스키마에서 FK 관계가 설정되지 않음
-  // contract_work_hours: ContractWorkHour[] | null;
-  // contract_benefits: ContractBenefit[] | null;
-  // contract_bonuses: ContractBonus[] | null;
-  // contract_insurances: ContractInsurance[] | null;
-  // contract_files: ContractFile[] | null;
+  contract_work_schedules?: ContractWorkSchedule[] | null;
+  employment_contract_work_hours?: ContractWorkHour[] | null;
 }
 
 export default function EmploymentContractDetailPage() {
@@ -149,10 +149,8 @@ export default function EmploymentContractDetailPage() {
     return statusMap[status] || status;
   };
 
-  // 현재 DB 스키마에서 FK 관계가 설정되지 않아 사용 불가
-  // 추후 스키마 업데이트 후 활성화 가능
   const getInsuranceNames = () => {
-    // contract_insurances 테이블 관계 미설정
+    // TODO: contract_insurances 테이블 연동 시 구현
     return "-";
   };
 
@@ -194,6 +192,9 @@ export default function EmploymentContractDetailPage() {
   // 급여 정보 가져오기 (배열 또는 단일 객체 대응)
   const salaries = contract.contract_salaries;
   const salary = Array.isArray(salaries) ? salaries[0] : salaries;
+
+  // 근무 시간 데이터 (API에서 employment_contract_work_hours 또는 contract_work_schedules로 제공)
+  const workSchedules = contract.employment_contract_work_hours || contract.contract_work_schedules || [];
 
   // 근로 계약 Header 정보
   const headerInfoData = [
@@ -268,19 +269,46 @@ export default function EmploymentContractDetailPage() {
   // 급여 정보 전체 데이터
   const fullSalaryInfoData = [...salaryInfoData, ...benefitsData, ...bonusesData];
 
-  // 계약 근무 시간 - contract_work_hours 테이블 관계 미설정
+  // 계약 근무 시간 데이터 포맷팅
+  const formatTime = (timeString: string | null) => {
+    if (!timeString) return "-";
+    // "HH:mm:ss" 형식을 "HH:mm"으로 변환
+    return timeString.substring(0, 5);
+  };
+
+  const formatWorkHours = (workHours: ContractWorkHour[] | null | undefined, dayType: string) => {
+    if (!workHours || workHours.length === 0) {
+      return [`등록된 ${dayType} 근무 시간이 없습니다.`];
+    }
+
+    const dayWorkHour = workHours.find((wh) => wh.day_type === dayType);
+    if (!dayWorkHour) {
+      return [`등록된 ${dayType} 근무 시간이 없습니다.`];
+    }
+
+    const values: string[] = [];
+    if (dayWorkHour.work_start_time && dayWorkHour.work_end_time) {
+      values.push(`근무: ${formatTime(dayWorkHour.work_start_time)} ~ ${formatTime(dayWorkHour.work_end_time)}`);
+    }
+    if (dayWorkHour.break_start_time && dayWorkHour.break_end_time) {
+      values.push(`휴게: ${formatTime(dayWorkHour.break_start_time)} ~ ${formatTime(dayWorkHour.break_end_time)}`);
+    }
+    
+    return values.length > 0 ? values : [`등록된 ${dayType} 근무 시간이 없습니다.`];
+  };
+
   const workHoursInfoData = [
     {
       label: "평일",
-      values: ["등록된 평일 근무 시간이 없습니다."],
+      values: formatWorkHours(workSchedules, "WEEKDAY"),
     },
     {
       label: "토요일",
-      values: ["등록된 토요일 근무 시간이 없습니다."],
+      values: formatWorkHours(workSchedules, "SATURDAY"),
     },
     {
       label: "일요일",
-      values: ["등록된 일요일 근무 시간이 없습니다."],
+      values: formatWorkHours(workSchedules, "SUNDAY"),
     },
   ];
 

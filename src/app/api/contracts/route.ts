@@ -68,8 +68,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // 데이터 반환 (contract_salaries는 이미 올바른 필드명으로 조회됨)
+    const mappedData = data || [];
+
     return NextResponse.json({
-      data: data || [],
+      data: mappedData || [],
       pagination: {
         page,
         limit,

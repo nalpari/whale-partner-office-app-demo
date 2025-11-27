@@ -1,0 +1,355 @@
+/**
+ * AI Chat Styles
+ * AI 챗봇 스타일
+ */
+
+/* ========================================
+   AI Icon
+   ======================================== */
+.ai-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.ai-icon-image {
+  flex-shrink: 0;
+}
+
+.ai-icon-fixed {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+}
+
+/* ========================================
+   Floating Chat Button
+   ======================================== */
+.floating-chat-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-chat-icon {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+}
+
+/* ========================================
+   AI Chat Overlay & Container
+   ======================================== */
+.ai-chat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #FFF;
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-chat-container {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background: #FFF;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 모바일: 최대 375px, 태블릿: 최대 600px, 데스크톱: 최대 800px */
+@media (min-width: 600px) {
+  .ai-chat-container {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ai-chat-container {
+    max-width: 800px;
+  }
+}
+
+/* ========================================
+   AI Chat Messages
+   ======================================== */
+.ai-chat-messages {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 32px;
+  padding: 0 24px;
+  overflow-y: auto;
+  flex: 1;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.ai-chat-messages::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* ========================================
+   Bot Message
+   ======================================== */
+.chat-message-bot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.chat-message-time-bot {
+  display: flex;
+  padding-left: 40px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-timestamp {
+  color: #72777A;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.3px;
+}
+
+.chat-message-content-bot {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.chat-ai-avatar {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.chat-bubble-bot {
+  display: flex;
+  padding: 16px;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 0 24px 24px 24px;
+  background: #F2F4F5;
+}
+
+.chat-text {
+  color: #303437;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.4px;
+  white-space: pre-line;
+}
+
+/* ========================================
+   Store List Message
+   ======================================== */
+.chat-message-storelist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.chat-storelist-bubble {
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1 0 0;
+  border-radius: 24px;
+  background: #F2F4F5;
+  margin-left: 40px;
+  align-self: stretch;
+}
+
+.chat-store-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.chat-store-name {
+  flex: 1 0 0;
+  color: #303437;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.4px;
+}
+
+.chat-store-distance {
+  color: #303437;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.4px;
+}
+
+/* ========================================
+   User Message
+   ======================================== */
+.chat-message-user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.chat-message-time-user {
+  display: flex;
+  padding-right: 20px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.chat-bubble-user {
+  display: flex;
+  padding: 16px;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 24px 24px 0 24px;
+  background: #7C909E;
+}
+
+.chat-text-user {
+  color: #FFF;
+  text-align: right;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.4px;
+}
+
+/* ========================================
+   AI Chat Input Section
+   ======================================== */
+.ai-chat-input-section {
+  display: flex;
+  padding: 32px 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 0 0 32px 32px;
+  border-top: 1px solid #F5F5F5;
+  background: #FFF;
+  max-width: 100%;
+  width: 100%;
+}
+
+.ai-chat-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  align-self: stretch;
+}
+
+.ai-chat-input-box {
+  display: flex;
+  padding: 10px 20px;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1 0 0;
+  border-radius: 48px;
+  border: 2px solid #979C9E;
+  background: #FFF;
+}
+
+.ai-chat-input {
+  flex: 1;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.08px;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.ai-chat-input::placeholder {
+  color: #72777A;
+}
+
+.ai-chat-mic-btn {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-chat-send-btn {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-chat-send-icon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 12px;
+  top: 12px;
+}

@@ -44,6 +44,10 @@ interface ContractData {
     annual_salary: number | null;
     monthly_salary: number | null;
     hourly_wage: number | null;
+  } | {
+    annual_salary: number | null;
+    monthly_salary: number | null;
+    hourly_wage: number | null;
   }[] | null;
 }
 

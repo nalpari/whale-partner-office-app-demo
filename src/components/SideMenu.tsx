@@ -63,15 +63,15 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
   const [isClosing, setIsClosing] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<{
     [key: string]: boolean;
-  }>({
-    masterData: true,
-  });
+  }>({});
 
   // 배경 스크롤 제어
   useEffect(() => {
     if (isOpen) {
       // 메뉴가 열릴 때 body 스크롤 비활성화
       document.body.style.overflow = "hidden";
+      // 메뉴가 열릴 때 모든 1depth 메뉴를 닫힌 상태로 초기화
+      setExpandedMenus({});
     } else {
       // 메뉴가 닫힐 때 body 스크롤 복원
       document.body.style.overflow = "";
@@ -313,14 +313,22 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
                         <PageIcon />
                         근로 계약 관리
                       </Link>
-                      <div className="nav-item-sub">
+                      <Link
+                        href="/payslip"
+                        className="nav-item-sub-link"
+                        onClick={handleClose}
+                      >
                         <PageIcon />
                         급여명세서
-                      </div>
-                      <div className="nav-item-sub">
+                      </Link>
+                      <Link
+                        href="/attendance"
+                        className="nav-item-sub-link"
+                        onClick={handleClose}
+                      >
                         <PageIcon />
                         출퇴근 현황
-                      </div>
+                      </Link>
                       <div className="nav-item-sub">
                         <PageIcon />
                         TODO List

@@ -1,0 +1,44 @@
+/**
+ * Breadcrumb Styles
+ * 브레드크럼 네비게이션 스타일
+ */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb-item {
+  color: #999;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.35px;
+}
+
+.breadcrumb-item-active {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.35px;
+}
+
+.breadcrumb-separator {
+  width: 3.5px;
+  height: 7px;
+  fill: #999;
+  stroke: #999;
+  stroke-width: 1px;
+}

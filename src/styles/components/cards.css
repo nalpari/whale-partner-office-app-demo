@@ -1,0 +1,440 @@
+/**
+ * Card Styles
+ * 접이식 카드, 템플릿 카드 스타일
+ */
+
+/* ========================================
+   Template Cards
+   ======================================== */
+.template-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 26px;
+  align-self: stretch;
+}
+
+.template-list-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  align-items: start;
+}
+
+@media (min-width: 640px) {
+  .template-list-cards {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .template-list-cards {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .template-list-cards {
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .template-list-cards {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 24px;
+  }
+}
+
+.template-card {
+  display: flex;
+  padding: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 0;
+  border-radius: 6px;
+  border: 1px solid #C3CCDC;
+  background: #FFF;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.template-card-selected {
+  display: flex;
+  padding: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 0;
+  border-radius: 6px;
+  border: 1px solid #C3CCDC;
+  background: #F9FBFD;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.template-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+}
+
+.template-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 34px;
+  align-self: stretch;
+}
+
+.template-card-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 34px;
+  align-self: stretch;
+}
+
+.template-card-fields {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  width: 100%;
+}
+
+.template-field {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.template-field-label {
+  min-width: 120px;
+  flex-shrink: 0;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.template-field-value {
+  flex: 1;
+  color: #666;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  word-break: break-word;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .template-field-label {
+    min-width: 130px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .template-field-label {
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 640px) {
+  .template-field {
+    flex-direction: row !important;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .template-field-label {
+    min-width: 100px;
+    width: auto;
+  }
+
+  .template-field-value {
+    min-width: 0;
+    width: auto;
+  }
+
+  .template-card {
+    padding: 16px;
+  }
+
+  .template-card-selected {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .template-card-fields {
+    gap: 10px;
+  }
+
+  .template-card {
+    padding: 12px;
+  }
+
+  .template-card-selected {
+    padding: 12px;
+  }
+
+  .template-field-label,
+  .template-field-value {
+    font-size: 14px;
+  }
+}
+
+.template-drag-handle {
+  width: 36px;
+  height: 36px;
+  aspect-ratio: 1/1;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  border-radius: 50%;
+  border: 1px solid #4E637E;
+  background: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: move;
+  padding: 0;
+}
+
+/* ========================================
+   Collapsible Cards
+   ======================================== */
+.collapsible-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 0 0 6px 0;
+}
+
+.collapsible-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.collapsible-card-title-wrapper {
+  display: flex;
+  padding-left: 16px;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid #556071;
+  background: #556071;
+}
+
+.collapsible-card-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+  overflow: hidden;
+  color: #F5F5F5;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.4px;
+}
+
+.collapsible-card-toggle {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  border-radius: 0 6px 0 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.collapsible-card-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.collapsible-card-actions-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  align-self: stretch;
+}
+
+.collapsible-card-action {
+  display: flex;
+  height: 44px;
+  padding: 10px 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #69727F;
+  border-right: 1px solid #69727F;
+  background: #474F5C;
+  cursor: pointer;
+  border-left: none;
+  border-bottom: none;
+  flex: 1 0 0;
+}
+
+.collapsible-card-action-last {
+  display: flex;
+  height: 44px;
+  padding: 10px 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  border-top: 1px solid #69727F;
+  background: #474F5C;
+  cursor: pointer;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.collapsible-card-action-label {
+  width: 38px;
+  color: #F0F2F5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+}
+
+.collapsible-card-body {
+  display: flex;
+  padding: 24px;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 0 0 6px 6px;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.collapsible-card-rows {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+}
+
+.collapsible-card-row {
+  display: flex;
+  padding: 14px 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  align-self: stretch;
+  border-bottom: 1px solid #EEE;
+}
+
+.collapsible-card-row-first {
+  display: flex;
+  padding-bottom: 14px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  align-self: stretch;
+  border-bottom: 1px solid #EEE;
+}
+
+.collapsible-card-row-last {
+  display: flex;
+  padding-top: 14px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  align-self: stretch;
+}
+
+.collapsible-card-row-only {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  align-self: stretch;
+}
+
+.collapsible-card-row-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-self: stretch;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.collapsible-card-row-values {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  align-self: stretch;
+}
+
+.collapsible-card-row-value {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #666;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}

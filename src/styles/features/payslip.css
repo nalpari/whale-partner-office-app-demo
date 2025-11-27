@@ -1,0 +1,826 @@
+/**
+ * Payslip Styles
+ * 급여명세서 스타일
+ */
+
+/* ========================================
+   Payslip Card
+   ======================================== */
+.payslip-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 12px;
+  align-self: stretch;
+  border-radius: 8px;
+  border: 1px solid #E8E8E8;
+  background: #FFF;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.payslip-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payslip-card-row {
+  display: flex;
+  gap: 16px;
+}
+
+.payslip-card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.payslip-card-field-full {
+  flex: none;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.payslip-card-label {
+  color: #888;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.payslip-card-value {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+/* ========================================
+   Payslip Status
+   ======================================== */
+.payslip-status-btn {
+  display: inline-flex;
+  padding: 6px 12px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 140%;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s ease;
+}
+
+.payslip-status-btn:hover {
+  opacity: 0.8;
+}
+
+.payslip-status-btn.payslip-status-pending {
+  background: #6A7E96;
+  color: #FFF;
+}
+
+.payslip-status-badge {
+  display: inline-flex;
+  padding: 6px 12px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 140%;
+}
+
+.payslip-status-badge.payslip-status-sent,
+.payslip-status-badge.payslip-status-completed {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+/* ========================================
+   Payslip Register Page
+   ======================================== */
+.payslip-register-title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.payslip-register-title {
+  align-self: stretch;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.55px;
+}
+
+.payslip-register-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+  align-self: stretch;
+  margin-top: 30px;
+}
+
+.payslip-register-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+
+/* ========================================
+   Button Groups
+   ======================================== */
+.payslip-btn-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.payslip-btn-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.payslip-btn-gray {
+  display: flex;
+  height: 42px;
+  padding: 9px 24px;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  border-radius: 6px;
+  background: #C6CDD6;
+  color: #FFF;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  border: none;
+  cursor: pointer;
+}
+
+.payslip-btn-basic {
+  display: flex;
+  height: 42px;
+  padding: 9px 24px;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  border-radius: 6px;
+  background: #6A7E96;
+  color: #F0F2F5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  border: none;
+  cursor: pointer;
+}
+
+.payslip-btn-outline {
+  display: flex;
+  height: 42px;
+  padding: 9px 18px;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #CED7E5;
+  background: #FFF;
+  color: #9BA7BA;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  cursor: pointer;
+}
+
+.payslip-btn-load {
+  display: flex;
+  height: 42px;
+  padding: 9px 18px;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 6px;
+  background: #9BA7BA;
+  color: #FFF;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ========================================
+   Form Cards
+   ======================================== */
+.payslip-form-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+}
+
+.payslip-form-card-group {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  width: 100%;
+}
+
+.payslip-form-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.payslip-form-card-top {
+  border-radius: 6px 6px 0 0;
+}
+
+.payslip-form-card-summary {
+  border-radius: 0 0 6px 6px;
+}
+
+.payslip-form-card-summary-middle {
+  border-radius: 0;
+}
+
+.payslip-form-card-summary-final {
+  border-radius: 0 0 6px 6px;
+}
+
+.payslip-form-body {
+  display: flex;
+  padding: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.payslip-form-body-summary {
+  display: flex;
+  padding: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+  background: #F9FBFD;
+}
+
+/* ========================================
+   Form Rows
+   ======================================== */
+.payslip-form-rows {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.payslip-form-rows-gap {
+  gap: 24px;
+}
+
+.payslip-form-row {
+  display: flex;
+  padding: 24px 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+  border-bottom: 1px solid #EEE;
+}
+
+.payslip-form-row:first-child {
+  padding-top: 0;
+}
+
+.payslip-form-row-last {
+  display: flex;
+  padding-top: 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.payslip-form-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-self: stretch;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.375px;
+}
+
+.payslip-form-required {
+  color: #F00;
+}
+
+.payslip-form-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+/* ========================================
+   Form Inputs
+   ======================================== */
+.payslip-form-select {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  cursor: pointer;
+}
+
+.payslip-form-select-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.payslip-form-input {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.payslip-form-input-disabled {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #F5F5F5;
+}
+
+.payslip-form-input-summary {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #C3CCDC;
+  background: #E8EDF7;
+}
+
+.payslip-form-input-summary-alt {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #C3CCDC;
+  background: #E3E8F1;
+}
+
+.payslip-form-input-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.payslip-form-input-text-right {
+  text-align: right;
+}
+
+.payslip-form-input-text-disabled {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #999;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.payslip-form-input-text-summary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+  overflow: hidden;
+  color: #999;
+  text-align: right;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.payslip-form-date {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.payslip-form-date-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.payslip-form-unit {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+/* ========================================
+   Deduction Items
+   ======================================== */
+.payslip-deduction-items {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+/* ========================================
+   File Upload Section
+   ======================================== */
+.payslip-file-upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.payslip-file-upload-btn {
+  position: relative;
+}
+
+.payslip-file-input-hidden {
+  display: none;
+}
+
+.payslip-file-dropzone {
+  display: flex;
+  padding: 30px 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 18px;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.payslip-file-dropzone-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-self: stretch;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.payslip-file-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  align-self: stretch;
+}
+
+.payslip-file-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 197px;
+}
+
+.payslip-file-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #366FE3;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  text-decoration: underline;
+}
+
+.payslip-file-delete-btn {
+  display: flex;
+  width: 18px;
+  height: 18px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 100px;
+  border: 1px solid #6A7E96;
+  background: #FFF;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ========================================
+   Calculation Card
+   ======================================== */
+.payslip-calculation-card {
+  display: flex;
+  padding: 24px;
+  align-items: flex-start;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.payslip-calculation-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+}
+
+.payslip-calculation-rows {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  align-self: stretch;
+}
+
+.payslip-calculation-row {
+  display: flex;
+  padding-bottom: 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  align-self: stretch;
+  border-bottom: 1px solid #EEE;
+}
+
+.payslip-calculation-row-last {
+  display: flex;
+  padding-top: 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  align-self: stretch;
+}
+
+.payslip-calculation-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-self: stretch;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.payslip-calculation-subtitle {
+  display: -webkit-box;
+  width: 180px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+.payslip-calculation-formulas {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.payslip-calculation-text {
+  align-self: stretch;
+  color: #666;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.35px;
+}
+
+/* ========================================
+   History Section
+   ======================================== */
+.payslip-calculation-history {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.payslip-history-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.payslip-history-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.35px;
+}
+
+.payslip-history-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.payslip-history-value {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #666;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.35px;
+}
+
+.payslip-history-divider {
+  width: 1px;
+  height: 11px;
+  background: #D9D9D9;
+}

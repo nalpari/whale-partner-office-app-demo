@@ -1,0 +1,333 @@
+/**
+ * Filter Styles
+ * 검색 필터, 라디오 버튼 필터 스타일
+ */
+
+/* ========================================
+   Search Result Toggle
+   ======================================== */
+.search-result-toggle {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.search-result-header {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  background: #FFF;
+}
+
+.search-result-info {
+  display: flex;
+  padding: 16px 14px;
+  align-items: center;
+  gap: 12px;
+  flex: 1 0 0;
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid #EBEBEB;
+}
+
+.search-result-label {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.4px;
+}
+
+.search-result-count {
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
+  letter-spacing: -0.4px;
+}
+
+.search-result-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-result-toggle-btn {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1/1;
+  border-radius: 100px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ========================================
+   Search Filter
+   ======================================== */
+.search-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  background: #FFF;
+}
+
+.filter-row {
+  display: flex;
+  padding: 16px 14px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  border-right: 1px solid #E8E8E8;
+  border-bottom: 1px solid #E8E8E8;
+  border-left: 1px solid #E8E8E8;
+  background: #FFF;
+}
+
+.filter-row:last-of-type {
+  border-radius: 0 0 6px 6px;
+}
+
+.filter-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-self: stretch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.375px;
+}
+
+.filter-label-text {
+  color: #888;
+}
+
+.filter-label-required {
+  color: #F00;
+}
+
+.filter-input-select {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  cursor: pointer;
+}
+
+.filter-input {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.filter-input-field {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  border: none;
+  outline: none;
+  width: 100%;
+  background: transparent;
+}
+
+.filter-input-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+  overflow: hidden;
+  color: #222;
+  text-overflow: ellipsis;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+}
+
+/* ========================================
+   Filter Radio Group
+   ======================================== */
+.filter-radio-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  align-self: stretch;
+}
+
+.filter-radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* ========================================
+   Filter Date
+   ======================================== */
+.filter-date-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+}
+
+.filter-input-date {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  cursor: pointer;
+}
+
+/* ========================================
+   Filter Actions
+   ======================================== */
+.filter-actions {
+  display: flex;
+  padding: 16px 14px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 0 0 6px 6px;
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+  border-left: 1px solid #EBEBEB;
+  background: #FFF;
+}
+
+.filter-actions-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.filter-btn-gray {
+  display: flex;
+  width: 100px;
+  height: 42px;
+  padding: 9px 24px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  background: #C6CDD6;
+  color: #FFF;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  border: none;
+  cursor: pointer;
+}
+
+.filter-btn-primary {
+  display: flex;
+  height: 42px;
+  padding: 9px 24px;
+  justify-content: center;
+  align-items: center;
+  flex: 1 0 0;
+  border-radius: 6px;
+  background: #6A7E96;
+  color: #F0F2F5;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ========================================
+   Filter Radio Buttons
+   ======================================== */
+.filter-radio-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.filter-radio-btn {
+  display: flex;
+  height: 42px;
+  padding: 9px 16px;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  color: #888;
+  text-align: center;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.375px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-radio-btn:hover {
+  border-color: #6A7E96;
+  color: #6A7E96;
+}
+
+.filter-radio-btn.active {
+  border-color: #6A7E96;
+  background: #6A7E96;
+  color: #FFF;
+}
