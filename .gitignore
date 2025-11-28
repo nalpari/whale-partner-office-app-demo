@@ -28,8 +28,8 @@ yarn.lock
 .DS_Store
 *.pem
 
-# project specific
-/reference
+# # project specific
+# /reference
 /docs
 
 # debug

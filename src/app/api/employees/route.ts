@@ -10,6 +10,8 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const search = searchParams.get('search') || '';
+    const employeeClassification = searchParams.get('employee_classification') || '';
+    const employmentStatus = searchParams.get('employment_status') || '';
     const offset = (page - 1) * limit;
 
     let query = supabase
@@ -22,6 +24,16 @@ export async function GET(request: NextRequest) {
     // 검색 조건 추가
     if (search) {
       query = query.or(`name.ilike.%${search}%,employee_id.ilike.%${search}%,email.ilike.%${search}%`);
+    }
+
+    // 직원 분류 필터 (정직원, 계약직 등)
+    if (employeeClassification) {
+      query = query.eq('employee_classification', employeeClassification);
+    }
+
+    // 근무 상태 필터 (근무, 퇴사 등)
+    if (employmentStatus) {
+      query = query.eq('employment_status', employmentStatus);
     }
 
     const { data, error, count } = await query;
@@ -140,6 +152,7 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
 
 
 

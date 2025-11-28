@@ -206,10 +206,14 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
 
                   {expandedMenus.masterData && (
                     <div className="nav-submenu">
-                      <div className="nav-item-sub">
+                      <Link
+                        href="/business-partner"
+                        className="nav-item-sub-link"
+                        onClick={handleClose}
+                      >
                         <PageIcon />
                         Business Partner Master
-                      </div>
+                      </Link>
                       <div className="nav-item-sub">
                         <PageIcon />
                         회원 Master

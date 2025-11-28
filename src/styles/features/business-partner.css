@@ -1,0 +1,364 @@
+/**
+ * Business Partner Styles
+ * Business Partner 관리 및 등록 스타일
+ */
+
+/* ========================================
+   Form Actions
+   ======================================== */
+.bp-form-actions-top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.bp-form-actions-top .store-btn-basic {
+  width: auto;
+  min-width: 100px;
+  flex: 0 0 auto;
+}
+
+.bp-form-actions-bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  margin-top: 24px;
+}
+
+.bp-form-actions-bottom .store-btn-gray,
+.bp-form-actions-bottom .store-btn-basic {
+  flex: 1 1 0;
+  max-width: 200px;
+}
+
+/* ========================================
+   Address Section
+   ======================================== */
+.bp-address-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.bp-address-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+}
+
+.bp-address-search-btn {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid #6A7E96;
+  background: #6A7E96;
+  color: #FFF;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bp-address-search-btn:hover {
+  background: #5A6E86;
+}
+
+.bp-address-postal {
+  flex: 1 1 0;
+}
+
+/* ========================================
+   File Upload Section
+   ======================================== */
+.bp-file-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  flex-wrap: wrap;
+}
+
+.bp-file-upload-btn {
+  display: flex;
+  height: 42px;
+  padding: 0 16px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #F5F5F5;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bp-file-upload-btn:hover {
+  background: #E9E9E9;
+}
+
+.bp-file-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.bp-file-link {
+  color: #0066CC;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  text-decoration: underline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bp-file-remove {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid #DDD;
+  background: #FFF;
+  color: #666;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.bp-file-remove:hover {
+  background: #F5F5F5;
+  color: #F00;
+}
+
+.bp-file-view,
+.bp-file-info {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid #DDD;
+  background: #FFF;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.bp-file-view:hover,
+.bp-file-info:hover {
+  background: #F5F5F5;
+}
+
+.bp-file-empty {
+  flex: 1 1 0;
+}
+
+/* ========================================
+   Input Prefix
+   ======================================== */
+.input-prefix {
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+/* ========================================
+   Radio Group Equal Width
+   ======================================== */
+.bp-radio-group-equal {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+.bp-radio-item-equal {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 4px;
+  min-width: 0;
+}
+
+/* ========================================
+   Select Field with Icon
+   ======================================== */
+.bp-select-field {
+  display: flex;
+  height: 42px;
+  padding: 0 12px 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #EBEBEB;
+  background: #FFF;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.bp-select-field .select-native {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  padding-right: 8px;
+}
+
+.bp-select-field .select-native:disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+
+.bp-select-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.bp-select-field-error {
+  display: flex;
+  height: 42px;
+  padding: 0 12px 0 16px;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #F00;
+  background: #FFF;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.bp-select-field-error .select-native {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #222;
+  font-family: Pretendard, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.375px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  padding-right: 8px;
+}
+
+/* form-field-input-wrapper 내부에서 bp-select-field가 전체 너비 차지 */
+.form-field-input-wrapper .bp-select-field,
+.form-field-input-wrapper .bp-select-field-error {
+  align-self: stretch;
+}
+
+/* ========================================
+   Partner Function Section Fix
+   ======================================== */
+/* form-section 내부 요소들이 전체 너비를 차지하도록 보장 */
+.form-section .form-section-body {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-section .form-section-content {
+  width: 100%;
+}
+
+.form-section .form-field-row {
+  width: 100%;
+}
+
+.form-section .form-field-input-wrapper {
+  width: 100%;
+}
+
+/* ========================================
+   Select Field Error State
+   ======================================== */
+.select-field-error {
+  border-color: #F00;
+}
+
+/* ========================================
+   Responsive Adjustments
+   ======================================== */
+@media (max-width: 480px) {
+  .bp-address-row {
+    flex-direction: column;
+  }
+
+  .bp-address-search-btn {
+    width: 100%;
+  }
+
+  .bp-address-postal {
+    width: 100%;
+  }
+
+  .bp-file-upload-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bp-file-upload-btn {
+    width: 100%;
+  }
+
+  .bp-file-preview {
+    width: 100%;
+  }
+
+  .bp-form-actions-bottom {
+    flex-direction: column;
+  }
+
+  .bp-form-actions-bottom .store-btn-gray,
+  .bp-form-actions-bottom .store-btn-basic {
+    max-width: none;
+    width: 100%;
+  }
+}

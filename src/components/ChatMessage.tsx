@@ -3,6 +3,7 @@ interface ChatMessageProps {
   message: string;
   timestamp: string;
   storeList?: { name: string; distance: string }[];
+  isLoading?: boolean;
 }
 
 export default function ChatMessage({
@@ -10,13 +11,16 @@ export default function ChatMessage({
   message,
   timestamp,
   storeList,
+  isLoading,
 }: ChatMessageProps) {
   if (type === "bot") {
     return (
       <div className="chat-message-bot">
-        <div className="chat-message-time-bot">
-          <span className="chat-timestamp">{timestamp}</span>
-        </div>
+        {timestamp && (
+          <div className="chat-message-time-bot">
+            <span className="chat-timestamp">{timestamp}</span>
+          </div>
+        )}
         <div className="chat-message-content-bot">
           <img
             src="https://api.builder.io/api/v1/image/assets/TEMP/cdd78ea81d7f222e3cafa56d5664eb8579b42e14?width=64"
@@ -24,7 +28,15 @@ export default function ChatMessage({
             className="chat-ai-avatar"
           />
           <div className="chat-bubble-bot">
-            <span className="chat-text">{message}</span>
+            {isLoading ? (
+              <div className="chat-loading">
+                <span className="chat-loading-dot"></span>
+                <span className="chat-loading-dot"></span>
+                <span className="chat-loading-dot"></span>
+              </div>
+            ) : (
+              <span className="chat-text">{message}</span>
+            )}
           </div>
         </div>
         {storeList && (
