@@ -25,7 +25,7 @@ const tools: Anthropic.Tool[] = [
   },
   {
     name: 'get_business_partner_list',
-    description: 'Business Partner(거래처/파트너) 목록을 조회합니다.',
+    description: 'Business Partner(거래처/파트너) 목록을 조회합니다. "BP 리스트 보여줘", "거래처 목록 보여줘" 같은 요청에 사용합니다.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -37,6 +37,24 @@ const tools: Anthropic.Tool[] = [
         limit: {
           type: 'number',
           description: '조회할 최대 개수 (기본값: 10)',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'get_business_partner_detail',
+    description: '특정 Business Partner의 상세 정보를 조회합니다. ID, 업체명, 브랜드명 등으로 검색할 수 있습니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        id: {
+          type: 'number',
+          description: 'Business Partner ID (정확한 ID를 알고 있을 때)',
+        },
+        search: {
+          type: 'string',
+          description: '업체명 또는 브랜드명으로 검색 (예: "테스트회사", "브랜드A")',
         },
       },
       required: [],
@@ -68,6 +86,126 @@ const tools: Anthropic.Tool[] = [
     },
   },
   {
+    name: 'get_employee_list',
+    description: '직원 목록을 조회합니다. "직원 리스트 보여줘", "직원 목록 보여줘" 같은 요청에 사용합니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        contract_classification: {
+          type: 'string',
+          enum: ['정직원', '파트타이머'],
+          description: '계약 분류 필터',
+        },
+        employee_classification: {
+          type: 'string',
+          enum: ['본사 직원', '가맹점 직원', '점포 직원'],
+          description: '소속 분류 필터',
+        },
+        employment_status: {
+          type: 'string',
+          enum: ['근무', '퇴사'],
+          description: '근무 상태 필터',
+        },
+        search: {
+          type: 'string',
+          description: '이름 또는 직원번호로 검색',
+        },
+        limit: {
+          type: 'number',
+          description: '조회할 최대 개수 (기본값: 10)',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'get_employee_detail',
+    description: '특정 직원의 상세 정보를 조회합니다. "홍길동 직원 정보 보여줘", "특정 직원 데이터 보여줘" 같은 요청에 사용합니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        id: {
+          type: 'number',
+          description: '직원 ID (정확한 ID를 알고 있을 때)',
+        },
+        name: {
+          type: 'string',
+          description: '직원 이름으로 검색 (예: "홍길동")',
+        },
+        employee_id: {
+          type: 'string',
+          description: '직원번호로 검색 (예: "EMP001")',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'get_employee_work_schedule',
+    description: '직원의 근무 스케줄(근무요일, 근무시간)을 조회합니다. "정직원 근무요일 알려줘", "홍길동 근무시간 보여줘", "직원들 언제 일해?" 같은 요청에 사용합니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        contract_classification: {
+          type: 'string',
+          enum: ['정직원', '파트타이머'],
+          description: '계약 분류 필터 (정직원 또는 파트타이머)',
+        },
+        employee_name: {
+          type: 'string',
+          description: '특정 직원 이름으로 검색 (예: "홍길동")',
+        },
+        employee_id: {
+          type: 'number',
+          description: '특정 직원 ID로 검색',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'get_employee_salary',
+    description: '직원의 급여 정보(연봉, 월급, 시급)를 조회합니다. "정직원 급여 알려줘", "홍길동 시급 보여줘", "직원 연봉 얼마야?", "월급 정보 보여줘" 같은 요청에 사용합니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        contract_classification: {
+          type: 'string',
+          enum: ['정직원', '파트타이머'],
+          description: '계약 분류 필터 (정직원 또는 파트타이머)',
+        },
+        employee_name: {
+          type: 'string',
+          description: '특정 직원 이름으로 검색 (예: "홍길동")',
+        },
+        employee_id: {
+          type: 'number',
+          description: '특정 직원 ID로 검색',
+        },
+        salary_type: {
+          type: 'string',
+          enum: ['ANNUAL', 'MONTHLY', 'HOURLY'],
+          description: '급여 유형 필터 (ANNUAL: 연봉제, MONTHLY: 월급제, HOURLY: 시급제)',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'get_current_working_employees',
+    description: '현재 근무 중인 직원 목록을 조회합니다. 오늘 출근했지만 아직 퇴근하지 않은 직원을 보여줍니다. "현재 근무중인 직원", "지금 일하는 사람", "아직 퇴근 안한 직원", "누가 근무중이야?" 같은 요청에 사용합니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        store_id: {
+          type: 'number',
+          description: '특정 매장의 근무 중인 직원만 조회 (선택사항)',
+        },
+      },
+      required: [],
+    },
+  },
+  {
     name: 'get_store_count',
     description: '매장(점포)의 총 개수를 조회합니다.',
     input_schema: {
@@ -77,6 +215,47 @@ const tools: Anthropic.Tool[] = [
           type: 'string',
           enum: ['ALL', 'active', 'inactive', 'closed'],
           description: '매장 상태 필터',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'get_store_list',
+    description: '매장(점포) 목록을 조회합니다. "매장 리스트 보여줘", "점포 목록 보여줘" 같은 요청에 사용합니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        status: {
+          type: 'string',
+          enum: ['ALL', 'active', 'inactive', 'closed'],
+          description: '매장 상태 필터',
+        },
+        search: {
+          type: 'string',
+          description: '매장명으로 검색',
+        },
+        limit: {
+          type: 'number',
+          description: '조회할 최대 개수 (기본값: 10)',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'get_store_detail',
+    description: '특정 매장의 상세 정보를 조회합니다. "강남점 정보 보여줘", "특정 매장 데이터 보여줘" 같은 요청에 사용합니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        id: {
+          type: 'number',
+          description: '매장 ID (정확한 ID를 알고 있을 때)',
+        },
+        name: {
+          type: 'string',
+          description: '매장명으로 검색 (예: "강남점")',
         },
       },
       required: [],
@@ -128,8 +307,9 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       const limit = (toolInput.limit as number) || 10;
       let query = supabase
         .from('business_partners')
-        .select('master_id, company_name, brand_name, operation_status, bp_code')
+        .select('id, master_id, company_name, brand_name, operation_status, bp_code, representative_name, representative_phone')
         .eq('is_deleted', false)
+        .order('created_at', { ascending: false })
         .limit(limit);
 
       if (toolInput.operation_status && toolInput.operation_status !== 'ALL') {
@@ -141,7 +321,35 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       return JSON.stringify({
         data,
         count: data?.length || 0,
+        dataType: 'business_partner_list',
         message: `Business Partner 목록입니다.`
+      });
+    }
+
+    case 'get_business_partner_detail': {
+      let query = supabase
+        .from('business_partners')
+        .select('*')
+        .eq('is_deleted', false);
+
+      if (toolInput.id) {
+        query = query.eq('id', toolInput.id);
+      } else if (toolInput.search) {
+        query = query.or(`company_name.ilike.%${toolInput.search}%,brand_name.ilike.%${toolInput.search}%`);
+      }
+
+      const { data, error } = await query.limit(1).single();
+      if (error) {
+        if (error.code === 'PGRST116') {
+          return JSON.stringify({ error: '해당 Business Partner를 찾을 수 없습니다.', dataType: 'not_found' });
+        }
+        return JSON.stringify({ error: error.message });
+      }
+
+      return JSON.stringify({
+        data,
+        dataType: 'business_partner_detail',
+        message: `${data.company_name}의 상세 정보입니다.`
       });
     }
 
@@ -178,6 +386,302 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       });
     }
 
+    case 'get_employee_list': {
+      const limit = (toolInput.limit as number) || 10;
+      let query = supabase
+        .from('employees')
+        .select('id, employee_id, name, position, phone, email, employee_classification, contract_classification, employment_status, workplace_name')
+        .eq('is_deleted', false)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (toolInput.contract_classification) {
+        query = query.eq('contract_classification', toolInput.contract_classification);
+      }
+      if (toolInput.employee_classification) {
+        query = query.eq('employee_classification', toolInput.employee_classification);
+      }
+      if (toolInput.employment_status) {
+        query = query.eq('employment_status', toolInput.employment_status);
+      }
+      if (toolInput.search) {
+        query = query.or(`name.ilike.%${toolInput.search}%,employee_id.ilike.%${toolInput.search}%`);
+      }
+
+      const { data, error } = await query;
+      if (error) return JSON.stringify({ error: error.message });
+      return JSON.stringify({
+        data,
+        count: data?.length || 0,
+        dataType: 'employee_list',
+        message: `직원 목록입니다.`
+      });
+    }
+
+    case 'get_employee_detail': {
+      let query = supabase
+        .from('employees')
+        .select('*')
+        .eq('is_deleted', false);
+
+      if (toolInput.id) {
+        query = query.eq('id', toolInput.id);
+      } else if (toolInput.name) {
+        query = query.ilike('name', `%${toolInput.name}%`);
+      } else if (toolInput.employee_id) {
+        query = query.ilike('employee_id', `%${toolInput.employee_id}%`);
+      }
+
+      const { data, error } = await query.limit(1).single();
+      if (error) {
+        if (error.code === 'PGRST116') {
+          return JSON.stringify({ error: '해당 직원을 찾을 수 없습니다.', dataType: 'not_found' });
+        }
+        return JSON.stringify({ error: error.message });
+      }
+
+      return JSON.stringify({
+        data,
+        dataType: 'employee_detail',
+        message: `${data.name}님의 상세 정보입니다.`
+      });
+    }
+
+    case 'get_employee_work_schedule': {
+      // 직원 + 근로계약서 + 근무스케줄 조인 쿼리
+      let employeeQuery = supabase
+        .from('employees')
+        .select('id, name, contract_classification, workplace_name')
+        .eq('is_deleted', false);
+
+      if (toolInput.contract_classification) {
+        employeeQuery = employeeQuery.eq('contract_classification', toolInput.contract_classification);
+      }
+      if (toolInput.employee_name) {
+        employeeQuery = employeeQuery.ilike('name', `%${toolInput.employee_name}%`);
+      }
+      if (toolInput.employee_id) {
+        employeeQuery = employeeQuery.eq('id', toolInput.employee_id);
+      }
+
+      const { data: employees, error: empError } = await employeeQuery;
+      if (empError) return JSON.stringify({ error: empError.message });
+      if (!employees || employees.length === 0) {
+        return JSON.stringify({ error: '해당 직원을 찾을 수 없습니다.', dataType: 'not_found' });
+      }
+
+      // 각 직원의 근무 스케줄 조회
+      const scheduleResults = [];
+      for (const emp of employees) {
+        // 해당 직원의 근로계약서 조회
+        const { data: contracts } = await supabase
+          .from('employment_contracts')
+          .select('id, store_name, contract_status')
+          .eq('employee_id', emp.id)
+          .or('is_deleted.eq.false,is_deleted.is.null');
+
+        if (contracts && contracts.length > 0) {
+          for (const contract of contracts) {
+            // 해당 계약서의 근무 스케줄 조회
+            const { data: schedules } = await supabase
+              .from('contract_work_schedules')
+              .select('day_type, work_days, work_start_time, work_end_time, break_start_time, break_end_time, frequency')
+              .eq('contract_id', contract.id);
+
+            if (schedules && schedules.length > 0) {
+              for (const schedule of schedules) {
+                scheduleResults.push({
+                  employee_name: emp.name,
+                  contract_classification: emp.contract_classification,
+                  workplace: emp.workplace_name,
+                  day_type: schedule.day_type,
+                  work_days: schedule.work_days,
+                  work_start_time: schedule.work_start_time,
+                  work_end_time: schedule.work_end_time,
+                  break_time: schedule.break_start_time && schedule.break_end_time
+                    ? `${schedule.break_start_time?.toString().slice(0, 5)}~${schedule.break_end_time?.toString().slice(0, 5)}`
+                    : null,
+                  frequency: schedule.frequency,
+                });
+              }
+            }
+          }
+        }
+      }
+
+      if (scheduleResults.length === 0) {
+        return JSON.stringify({
+          error: '해당 직원의 근무 스케줄 정보가 없습니다.',
+          dataType: 'not_found'
+        });
+      }
+
+      return JSON.stringify({
+        data: scheduleResults,
+        count: scheduleResults.length,
+        dataType: 'work_schedule',
+        message: `근무 스케줄 정보입니다.`
+      });
+    }
+
+    case 'get_employee_salary': {
+      // 직원 + 근로계약서 + 급여 조인 쿼리
+      let employeeQuery = supabase
+        .from('employees')
+        .select('id, name, contract_classification, workplace_name')
+        .eq('is_deleted', false);
+
+      if (toolInput.contract_classification) {
+        employeeQuery = employeeQuery.eq('contract_classification', toolInput.contract_classification);
+      }
+      if (toolInput.employee_name) {
+        employeeQuery = employeeQuery.ilike('name', `%${toolInput.employee_name}%`);
+      }
+      if (toolInput.employee_id) {
+        employeeQuery = employeeQuery.eq('id', toolInput.employee_id);
+      }
+
+      const { data: employees, error: empError } = await employeeQuery;
+      if (empError) return JSON.stringify({ error: empError.message });
+      if (!employees || employees.length === 0) {
+        return JSON.stringify({ error: '해당 직원을 찾을 수 없습니다.', dataType: 'not_found' });
+      }
+
+      // 각 직원의 급여 정보 조회
+      const salaryResults = [];
+      for (const emp of employees) {
+        // 해당 직원의 근로계약서 조회
+        let contractQuery = supabase
+          .from('employment_contracts')
+          .select('id, store_name, contract_status, salary_type')
+          .eq('employee_id', emp.id)
+          .or('is_deleted.eq.false,is_deleted.is.null');
+
+        if (toolInput.salary_type) {
+          contractQuery = contractQuery.eq('salary_type', toolInput.salary_type);
+        }
+
+        const { data: contracts } = await contractQuery;
+
+        if (contracts && contracts.length > 0) {
+          for (const contract of contracts) {
+            // 해당 계약서의 급여 정보 조회
+            const { data: salaries } = await supabase
+              .from('contract_salaries')
+              .select('annual_salary, monthly_salary, hourly_wage')
+              .eq('contract_id', contract.id);
+
+            if (salaries && salaries.length > 0) {
+              for (const salary of salaries) {
+                salaryResults.push({
+                  employee_name: emp.name,
+                  contract_classification: emp.contract_classification,
+                  workplace: emp.workplace_name,
+                  salary_type: contract.salary_type,
+                  annual_salary: salary.annual_salary ? Number(salary.annual_salary) : null,
+                  monthly_salary: salary.monthly_salary ? Number(salary.monthly_salary) : null,
+                  hourly_wage: salary.hourly_wage ? Number(salary.hourly_wage) : null,
+                });
+              }
+            }
+          }
+        }
+      }
+
+      if (salaryResults.length === 0) {
+        return JSON.stringify({
+          error: '해당 직원의 급여 정보가 없습니다.',
+          dataType: 'not_found'
+        });
+      }
+
+      return JSON.stringify({
+        data: salaryResults,
+        count: salaryResults.length,
+        dataType: 'salary',
+        message: `급여 정보입니다.`
+      });
+    }
+
+    case 'get_current_working_employees': {
+      // 오늘 날짜 구하기 (한국 시간 기준)
+      const today = new Date();
+      const koreaTime = new Date(today.getTime() + (9 * 60 * 60 * 1000));
+      const todayStr = koreaTime.toISOString().split('T')[0];
+
+      // 오늘 출퇴근 기록 중 퇴근하지 않은 직원 조회
+      let query = supabase
+        .from('attendance_records')
+        .select(`
+          id,
+          employee_id,
+          store_id,
+          work_date,
+          attendance_status,
+          total_work_minutes
+        `)
+        .eq('work_date', todayStr)
+        .eq('attendance_status', 'working')
+        .or('is_deleted.eq.false,is_deleted.is.null');
+
+      if (toolInput.store_id) {
+        query = query.eq('store_id', toolInput.store_id);
+      }
+
+      const { data: records, error: recordError } = await query;
+      if (recordError) return JSON.stringify({ error: recordError.message });
+
+      if (!records || records.length === 0) {
+        return JSON.stringify({
+          data: [],
+          count: 0,
+          dataType: 'current_working',
+          message: `오늘(${todayStr}) 현재 근무 중인 직원이 없습니다.`
+        });
+      }
+
+      // 각 출퇴근 기록에 대해 세션 정보와 직원 정보 조회
+      const workingEmployees = [];
+      for (const record of records) {
+        // 세션 정보 조회 (퇴근 시간이 NULL인 경우만)
+        const { data: sessions } = await supabase
+          .from('attendance_sessions')
+          .select('clock_in_time, clock_out_time')
+          .eq('attendance_record_id', record.id)
+          .is('clock_out_time', null);
+
+        if (sessions && sessions.length > 0) {
+          // 직원 정보 조회
+          const { data: employee } = await supabase
+            .from('employees')
+            .select('name, contract_classification, workplace_name, phone')
+            .eq('id', record.employee_id)
+            .single();
+
+          if (employee) {
+            workingEmployees.push({
+              employee_name: employee.name,
+              contract_classification: employee.contract_classification,
+              workplace: employee.workplace_name,
+              phone: employee.phone,
+              clock_in_time: sessions[0].clock_in_time,
+              work_date: record.work_date,
+            });
+          }
+        }
+      }
+
+      return JSON.stringify({
+        data: workingEmployees,
+        count: workingEmployees.length,
+        dataType: 'current_working',
+        today: todayStr,
+        message: workingEmployees.length > 0
+          ? `현재 ${workingEmployees.length}명이 근무 중입니다.`
+          : `오늘(${todayStr}) 현재 근무 중인 직원이 없습니다.`
+      });
+    }
+
     case 'get_store_count': {
       let query = supabase
         .from('stores')
@@ -192,6 +696,57 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       return JSON.stringify({
         count,
         message: `매장은 총 ${count}개입니다.`
+      });
+    }
+
+    case 'get_store_list': {
+      const limit = (toolInput.limit as number) || 10;
+      let query = supabase
+        .from('stores')
+        .select('id, name, address, phone, status, opening_hours, created_at')
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (toolInput.status && toolInput.status !== 'ALL') {
+        query = query.eq('status', toolInput.status);
+      }
+      if (toolInput.search) {
+        query = query.ilike('name', `%${toolInput.search}%`);
+      }
+
+      const { data, error } = await query;
+      if (error) return JSON.stringify({ error: error.message });
+      return JSON.stringify({
+        data,
+        count: data?.length || 0,
+        dataType: 'store_list',
+        message: `매장 목록입니다.`
+      });
+    }
+
+    case 'get_store_detail': {
+      let query = supabase
+        .from('stores')
+        .select('*');
+
+      if (toolInput.id) {
+        query = query.eq('id', toolInput.id);
+      } else if (toolInput.name) {
+        query = query.ilike('name', `%${toolInput.name}%`);
+      }
+
+      const { data, error } = await query.limit(1).single();
+      if (error) {
+        if (error.code === 'PGRST116') {
+          return JSON.stringify({ error: '해당 매장을 찾을 수 없습니다.', dataType: 'not_found' });
+        }
+        return JSON.stringify({ error: error.message });
+      }
+
+      return JSON.stringify({
+        data,
+        dataType: 'store_detail',
+        message: `${data.name}의 상세 정보입니다.`
       });
     }
 
@@ -254,15 +809,72 @@ export async function POST(request: NextRequest) {
 - 점포, 점포직원 = employee_classification이 "점포 직원"
 
 ## 당신이 할 수 있는 일
-- Business Partner(BP/거래처/파트너) 정보 조회 및 개수 확인
-- 직원 정보 조회 및 개수 확인 (계약분류, 소속분류, 근무상태별)
-- 매장(점포) 정보 조회 및 개수 확인
+- Business Partner(BP/거래처/파트너) 목록 조회, 상세 정보 조회, 개수 확인
+- 직원 목록 조회, 상세 정보 조회, 개수 확인 (계약분류, 소속분류, 근무상태별)
+- 직원 근무 스케줄(근무요일, 근무시간) 조회
+- 직원 급여 정보(연봉, 월급, 시급) 조회
+- 현재 근무 중인 직원 조회 (오늘 출근 후 아직 퇴근하지 않은 직원)
+- 매장(점포) 목록 조회, 상세 정보 조회, 개수 확인
 - 메뉴 정보 조회
 - 주문/매출 정보 요약
 
 ## 응답 규칙
 - 답변은 항상 친절하고 간결하게 한국어로 해주세요.
-- 숫자나 데이터를 말할 때는 명확하게 표현해주세요.`;
+- 숫자나 데이터를 말할 때는 명확하게 표현해주세요.
+- 목록 데이터를 보여줄 때는 표 형식으로 깔끔하게 정리해주세요.
+- 상세 정보를 보여줄 때는 주요 필드를 구분하여 보기 쉽게 표현해주세요.
+
+## 데이터 표시 형식
+목록 조회 시 다음과 같은 마크다운 테이블 형식으로 보여주세요:
+
+### 직원 목록 예시
+| 이름 | 직원번호 | 직책 | 소속 | 근무상태 |
+|------|---------|------|------|---------|
+| 홍길동 | EMP001 | 매니저 | 본사 직원 | 근무 |
+
+### 매장 목록 예시
+| 매장명 | 주소 | 전화번호 | 상태 |
+|--------|------|---------|------|
+| 강남점 | 서울시 강남구... | 02-1234-5678 | 운영중 |
+
+### Business Partner 목록 예시
+| 업체명 | 브랜드명 | 대표자 | 상태 |
+|--------|---------|--------|------|
+| (주)테스트 | 브랜드A | 김대표 | 운영중 |
+
+### 근무 스케줄 예시
+| 직원명 | 근무지 | 근무유형 | 근무요일 | 출근 | 퇴근 | 휴게시간 | 빈도 |
+|--------|--------|---------|---------|------|------|---------|------|
+| 홍길동 | 강남점 | 평일 | 월,화,수,목,금 | 09:00 | 18:00 | 12:00~13:00 | 매주 |
+
+근무유형(day_type) 값 설명:
+- WEEKDAY: 평일
+- SATURDAY: 토요일
+- SUNDAY: 일요일
+- HOLIDAY: 공휴일
+
+빈도(frequency) 값 설명:
+- EVERY_WEEK: 매주
+- EVERY_OTHER_WEEK: 격주
+
+### 급여 정보 예시
+| 직원명 | 근무지 | 급여유형 | 연봉 | 월급 | 시급 |
+|--------|--------|---------|------|------|------|
+| 홍길동 | 강남점 | 연봉제 | 45,000,000원 | 3,750,000원 | 12,360원 |
+
+급여유형(salary_type) 값 설명:
+- ANNUAL: 연봉제
+- MONTHLY: 월급제
+- HOURLY: 시급제
+
+금액 표시 시 천 단위 콤마를 사용하고 '원'을 붙여주세요.
+
+### 현재 근무 중인 직원 예시
+| 직원명 | 계약분류 | 근무지 | 출근시간 | 연락처 |
+|--------|---------|--------|---------|--------|
+| 김철수 | 정직원 | 강남점 | 09:00 | 010-1234-5678 |
+
+현재 근무 중인 직원은 오늘 출근했지만 아직 퇴근 기록이 없는 직원입니다.`;
 
     // 대화 메시지 구성
     const messages: Anthropic.MessageParam[] = [

@@ -6,6 +6,130 @@ interface ChatMessageProps {
   isLoading?: boolean;
 }
 
+interface ParsedTable {
+  headers: string[];
+  rows: string[][];
+}
+
+function parseMarkdownTable(text: string): { tables: ParsedTable[]; textParts: string[] } {
+  const lines = text.split('\n');
+  const tables: ParsedTable[] = [];
+  const textParts: string[] = [];
+
+  let currentTextLines: string[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // 테이블 헤더 감지 (| 로 시작하고 끝나는 라인)
+    if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
+      // 이전 텍스트 저장
+      if (currentTextLines.length > 0) {
+        textParts.push(currentTextLines.join('\n'));
+        currentTextLines = [];
+      }
+
+      // 테이블 헤더 파싱
+      const headerLine = line;
+      const headers = headerLine
+        .split('|')
+        .filter(cell => cell.trim() !== '')
+        .map(cell => cell.trim());
+
+      // 다음 라인이 구분선인지 확인
+      if (i + 1 < lines.length && lines[i + 1].includes('---')) {
+        i += 2; // 헤더와 구분선 스킵
+
+        const rows: string[][] = [];
+
+        // 테이블 행 파싱
+        while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+          const rowCells = lines[i]
+            .split('|')
+            .filter(cell => cell.trim() !== '')
+            .map(cell => cell.trim());
+          rows.push(rowCells);
+          i++;
+        }
+
+        if (rows.length > 0) {
+          tables.push({ headers, rows });
+          textParts.push(`__TABLE_${tables.length - 1}__`);
+        }
+        continue;
+      }
+    }
+
+    currentTextLines.push(line);
+    i++;
+  }
+
+  // 남은 텍스트 저장
+  if (currentTextLines.length > 0) {
+    textParts.push(currentTextLines.join('\n'));
+  }
+
+  return { tables, textParts };
+}
+
+function renderContent(message: string) {
+  const { tables, textParts } = parseMarkdownTable(message);
+
+  if (tables.length === 0) {
+    return <span className="chat-text">{message}</span>;
+  }
+
+  return (
+    <div className="chat-content-wrapper">
+      {textParts.map((part, index) => {
+        const tableMatch = part.match(/__TABLE_(\d+)__/);
+        if (tableMatch) {
+          const tableIndex = parseInt(tableMatch[1]);
+          const table = tables[tableIndex];
+          return (
+            <div key={index} className="chat-table-wrapper">
+              <table className="chat-data-table">
+                <thead>
+                  <tr>
+                    {table.headers.map((header, hIndex) => (
+                      <th key={hIndex}>{header}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {table.rows.map((row, rIndex) => (
+                    <tr key={rIndex}>
+                      {row.map((cell, cIndex) => (
+                        <td key={cIndex}>{cell}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+        }
+
+        // 일반 텍스트 - 줄바꿈 처리
+        const trimmedPart = part.trim();
+        if (!trimmedPart) return null;
+
+        return (
+          <span key={index} className="chat-text">
+            {trimmedPart.split('\n').map((line, lineIndex) => (
+              <span key={lineIndex}>
+                {line}
+                {lineIndex < trimmedPart.split('\n').length - 1 && <br />}
+              </span>
+            ))}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function ChatMessage({
   type,
   message,
@@ -35,7 +159,7 @@ export default function ChatMessage({
                 <span className="chat-loading-dot"></span>
               </div>
             ) : (
-              <span className="chat-text">{message}</span>
+              renderContent(message)
             )}
           </div>
         </div>
