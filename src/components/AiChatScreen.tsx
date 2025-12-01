@@ -33,17 +33,24 @@ function getCurrentTimestamp(): string {
 }
 
 export default function AiChatScreen({ isOpen, onClose }: AiChatScreenProps) {
+  const getInitialMessage = (): Message => ({
+    type: "bot",
+    message: "안녕하세요, Whale ERP AI 어시스턴트입니다.\n무엇을 도와드릴까요?\n\n예시 질문:\n• Business Partner는 총 몇 명이야?\n• 직원 수 알려줘\n• 매장은 몇 개야?",
+    timestamp: getCurrentTimestamp(),
+  });
+
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      type: "bot",
-      message: "안녕하세요, Whale ERP AI 어시스턴트입니다.\n무엇을 도와드릴까요?\n\n예시 질문:\n• Business Partner는 총 몇 명이야?\n• 직원 수 알려줘\n• 매장은 몇 개야?",
-      timestamp: getCurrentTimestamp(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([getInitialMessage()]);
   const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const handleReset = () => {
+    setMessages([getInitialMessage()]);
+    setConversationHistory([]);
+    setInputValue("");
+    setIsLoading(false);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -147,7 +154,7 @@ export default function AiChatScreen({ isOpen, onClose }: AiChatScreenProps) {
   return (
     <div className="ai-chat-overlay">
       <div className="ai-chat-container">
-        <AiChatHeader onClose={onClose} />
+        <AiChatHeader onClose={onClose} onReset={handleReset} />
 
         <div className="ai-chat-messages">
           {messages.map((msg, index) => (
