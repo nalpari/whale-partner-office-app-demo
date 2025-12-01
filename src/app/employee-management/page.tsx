@@ -9,7 +9,7 @@ import Button from "@/components/Button";
 import PerPageSelect from "@/components/PerPageSelect";
 import EmployeeCard from "@/components/EmployeeCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
-import SkeletonCard from "@/components/SkeletonCard";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface Employee {
   id: number;
@@ -138,13 +138,7 @@ export default function EmployeeManagementPage() {
               </div>
 
               {loading && (
-                <div className="template-list">
-                  <div className="template-list-cards">
-                    {Array.from({ length: 6 }).map((_, index) => (
-                      <SkeletonCard key={index} />
-                    ))}
-                  </div>
-                </div>
+                <LoadingScreen type="list" cardCount={6} showHeader={false} />
               )}
 
               {error && (

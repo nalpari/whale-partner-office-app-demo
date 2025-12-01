@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Breadcrumb from "@/components/Breadcrumb";
 import CollapsibleCard from "@/components/CollapsibleCard";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface Career {
   id?: number;
@@ -129,16 +130,7 @@ export default function EmployeeDetailPage() {
   };
 
   if (loading) {
-    return (
-      <>
-        <Header />
-        <div className="page-container">
-          <div className="loading-container">
-            <div>로딩 중...</div>
-          </div>
-        </div>
-      </>
-    );
+    return <LoadingScreen type="detail" blockCount={5} />;
   }
 
   if (error || !employee) {

@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Breadcrumb from "@/components/Breadcrumb";
 import StoreSelect from "@/components/StoreSelect";
 import CollapsibleCard from "@/components/CollapsibleCard";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface BpType {
   id: string;
@@ -193,18 +194,7 @@ export default function BusinessPartnerDetailPage() {
 
 
   if (loading) {
-    return (
-      <>
-        <Header />
-        <div className="page-container">
-          <div className="loading-container" style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px' }}>
-            <div className="skeleton skeleton-title" style={{ width: '100%', height: '200px', borderRadius: '12px' }}></div>
-            <div className="skeleton skeleton-block" style={{ width: '100%', height: '150px', borderRadius: '12px' }}></div>
-            <div className="skeleton skeleton-block" style={{ width: '100%', height: '150px', borderRadius: '12px' }}></div>
-          </div>
-        </div>
-      </>
-    );
+    return <LoadingScreen type="detail" blockCount={4} />;
   }
 
   if (error || !partner) {

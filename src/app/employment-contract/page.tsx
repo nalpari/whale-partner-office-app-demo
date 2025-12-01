@@ -10,7 +10,7 @@ import Button from "@/components/Button";
 import PerPageSelect from "@/components/PerPageSelect";
 import ContractCard from "@/components/ContractCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
-import SkeletonCard from "@/components/SkeletonCard";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface ContractData {
   id: number;
@@ -170,13 +170,7 @@ export default function EmploymentContractPage() {
               </div>
 
               {loading && (
-                <div className="template-list">
-                  <div className="template-list-cards">
-                    {Array.from({ length: 6 }).map((_, index) => (
-                      <SkeletonCard key={index} />
-                    ))}
-                  </div>
-                </div>
+                <LoadingScreen type="list" cardCount={6} showHeader={false} />
               )}
 
               {error && (

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Breadcrumb from "@/components/Breadcrumb";
 import StoreSelect from "@/components/StoreSelect";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface BpType {
   id: string;
@@ -46,6 +47,7 @@ interface FormData {
 
 export default function BusinessPartnerNewPage() {
   const router = useRouter();
+  const [initialLoading, setInitialLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [bpTypes, setBpTypes] = useState<BpType[]>([]);
   const [partnerFunctions] = useState<PartnerFunction[]>([
@@ -121,9 +123,13 @@ export default function BusinessPartnerNewPage() {
       }
     };
 
-    fetchNextMasterId();
-    fetchBpTypes();
-    fetchBusinessPartners();
+    Promise.all([
+      fetchNextMasterId(),
+      fetchBpTypes(),
+      fetchBusinessPartners(),
+    ]).finally(() => {
+      setInitialLoading(false);
+    });
   }, []);
 
   const handleInputChange = (field: keyof FormData, value: string | File | null) => {
@@ -242,6 +248,10 @@ export default function BusinessPartnerNewPage() {
   const handleCancel = () => {
     router.push("/business-partner");
   };
+
+  if (initialLoading) {
+    return <LoadingScreen type="form" blockCount={2} />;
+  }
 
   return (
     <>

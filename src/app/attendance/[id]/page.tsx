@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Breadcrumb from "@/components/Breadcrumb";
 import AttendanceTimeCard from "@/components/AttendanceTimeCard";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface AttendanceRecord {
   date: string;
@@ -72,16 +73,7 @@ export default function AttendanceDetailPage() {
   };
 
   if (loading) {
-    return (
-      <>
-        <Header />
-        <div className="page-container">
-          <div className="loading-container">
-            <div>로딩 중...</div>
-          </div>
-        </div>
-      </>
-    );
+    return <LoadingScreen type="detail" blockCount={3} />;
   }
 
   if (error) {

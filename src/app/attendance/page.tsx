@@ -9,7 +9,7 @@ import PerPageSelect from "@/components/PerPageSelect";
 import AttendanceCard from "@/components/AttendanceCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
 import StoreSelect from "@/components/StoreSelect";
-import SkeletonCard from "@/components/SkeletonCard";
+import LoadingScreen from "@/components/LoadingScreen";
 
 interface AttendanceData {
   id: number;
@@ -172,13 +172,7 @@ export default function AttendancePage() {
               </div>
 
               {loading && (
-                <div className="template-list">
-                  <div className="template-list-cards">
-                    {Array.from({ length: 6 }).map((_, index) => (
-                      <SkeletonCard key={index} />
-                    ))}
-                  </div>
-                </div>
+                <LoadingScreen type="list" cardCount={6} showHeader={false} />
               )}
 
               {error && (
