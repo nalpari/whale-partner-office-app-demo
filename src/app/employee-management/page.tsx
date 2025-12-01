@@ -9,6 +9,7 @@ import Button from "@/components/Button";
 import PerPageSelect from "@/components/PerPageSelect";
 import EmployeeCard from "@/components/EmployeeCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
+import SkeletonCard from "@/components/SkeletonCard";
 
 interface Employee {
   id: number;
@@ -44,6 +45,7 @@ export default function EmployeeManagementPage() {
     totalPages: 0,
   });
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState<string | null>(null);
 
   const fetchEmployees = async (page: number = 1, limit: number = 50) => {
@@ -51,7 +53,7 @@ export default function EmployeeManagementPage() {
       setLoading(true);
       setError(null);
       const response = await fetch(`/api/employees?page=${page}&limit=${limit}`);
-      
+
       if (!response.ok) {
         throw new Error('직원 데이터를 불러오는데 실패했습니다.');
       }
@@ -109,7 +111,7 @@ export default function EmployeeManagementPage() {
           <div className="page-header">
             <div className="page-title-section">
               <h1 className="page-title">직원 정보 관리</h1>
-              <Breadcrumb 
+              <Breadcrumb
                 items={[
                   { label: "BP 직원 관리" },
                   { label: "직원 정보 관리", active: true }
@@ -129,15 +131,19 @@ export default function EmployeeManagementPage() {
             <div className="tables-section">
               <div className="tables-header">
                 <Button variant="primary">등록</Button>
-                <PerPageSelect 
-                  value={pagination.limit} 
+                <PerPageSelect
+                  value={pagination.limit}
                   onChange={handlePerPageChange}
                 />
               </div>
 
               {loading && (
-                <div className="loading-container">
-                  <div>로딩 중...</div>
+                <div className="template-list">
+                  <div className="template-list-cards">
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <SkeletonCard key={index} />
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -152,9 +158,9 @@ export default function EmployeeManagementPage() {
                   <div className="template-list-cards">
                     {employees.length > 0 ? (
                       employees.map((employee) => (
-                        <EmployeeCard 
-                          key={employee.id} 
-                          data={employee} 
+                        <EmployeeCard
+                          key={employee.id}
+                          data={employee}
                         />
                       ))
                     ) : (

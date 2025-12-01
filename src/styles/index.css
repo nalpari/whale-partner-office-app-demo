@@ -26,6 +26,7 @@
 @import "./components/pagination.css";
 @import "./components/datepicker.css";
 @import "./components/file-upload.css";
+@import "./components/skeleton.css";
 
 /* ========================================
    Feature Styles
