@@ -197,8 +197,10 @@ export default function BusinessPartnerDetailPage() {
       <>
         <Header />
         <div className="page-container">
-          <div className="loading-container">
-            <div>로딩 중...</div>
+          <div className="loading-container" style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px' }}>
+            <div className="skeleton skeleton-title" style={{ width: '100%', height: '200px', borderRadius: '12px' }}></div>
+            <div className="skeleton skeleton-block" style={{ width: '100%', height: '150px', borderRadius: '12px' }}></div>
+            <div className="skeleton skeleton-block" style={{ width: '100%', height: '150px', borderRadius: '12px' }}></div>
           </div>
         </div>
       </>
@@ -259,23 +261,23 @@ export default function BusinessPartnerDetailPage() {
   // Partner Function 정보
   const partnerFunctionData = partner.bp_partner_functions && partner.bp_partner_functions.length > 0
     ? partner.bp_partner_functions.map((pf) => ({
-        label: getPartnerFunctionTypeText(pf.partner_function_type),
-        values: [
-          pf.target_bp
-            ? `(${getOperationStatusText(pf.target_bp.operation_status)}) ${pf.target_bp.company_name}${pf.target_bp.brand_name ? ` | ${pf.target_bp.brand_name}` : ''} | ${pf.target_bp.master_id}`
-            : '-',
-        ],
-      }))
+      label: getPartnerFunctionTypeText(pf.partner_function_type),
+      values: [
+        pf.target_bp
+          ? `(${getOperationStatusText(pf.target_bp.operation_status)}) ${pf.target_bp.company_name}${pf.target_bp.brand_name ? ` | ${pf.target_bp.brand_name}` : ''} | ${pf.target_bp.master_id}`
+          : '-',
+      ],
+    }))
     : [{ label: "Partner Function", values: ["등록된 Partner Function이 없습니다."] }];
 
   // 사용 서비스 정보
   const serviceInfoData = partner.bp_services && partner.bp_services.length > 0
     ? partner.bp_services.map((service) => ({
-        label: service.service_types?.name || '-',
-        values: [
-          `시작일: ${formatDate(service.start_date)} | 상태: ${getServiceStatusText(service.status)}`,
-        ],
-      }))
+      label: service.service_types?.name || '-',
+      values: [
+        `시작일: ${formatDate(service.start_date)} | 상태: ${getServiceStatusText(service.status)}`,
+      ],
+    }))
     : [{ label: "사용 서비스", values: ["등록된 서비스가 없습니다."] }];
 
   // 등록 및 수정 이력 데이터

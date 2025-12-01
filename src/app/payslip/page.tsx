@@ -11,6 +11,7 @@ import PerPageSelect from "@/components/PerPageSelect";
 import PayslipCard from "@/components/PayslipCard";
 import PaginationWrapper from "@/components/PaginationWrapper";
 import StoreSelect from "@/components/StoreSelect";
+import SkeletonCard from "@/components/SkeletonCard";
 
 interface PayslipData {
   id: number;
@@ -179,8 +180,12 @@ export default function PayslipPage() {
               </div>
 
               {loading && (
-                <div className="loading-container">
-                  <div>로딩 중...</div>
+                <div className="template-list">
+                  <div className="template-list-cards">
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <SkeletonCard key={index} />
+                    ))}
+                  </div>
                 </div>
               )}
 
