@@ -4,22 +4,36 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Whale Partner Office App Demo** - Next.js 16.0.3 기반의 **모바일 우선** ERP 관리 시스템입니다. Next.js App Router, React 19.2.0, TypeScript, Tailwind CSS v4를 사용하며, React Compiler가 활성화되어 있습니다.
+**Whale Partner Office App Demo** - Next.js 16.0.3 기반의 **모바일 우선** ERP 관리 시스템입니다. Next.js App Router, React 19.2.0, TypeScript, Tailwind CSS v4를 사용하며, React Compiler가 활성화되어 있습니다. Supabase를 백엔드 데이터베이스로 사용하고, Anthropic Claude API를 통한 AI 채팅 기능을 제공합니다.
 
 ## Development Commands
 
 ```bash
 # 개발 서버 실행 (http://localhost:3000)
-npm run dev
+pnpm dev        # 권장
+npm run dev     # 대안
 
 # 프로덕션 빌드
-npm run build
+pnpm build
 
 # 프로덕션 서버 실행
-npm start
+pnpm start
 
 # ESLint 실행
-npm run lint
+pnpm lint
+```
+
+## Environment Variables
+
+`.env.local` 파일에 다음 환경 변수가 필요합니다:
+
+```bash
+# Supabase (필수)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Anthropic Claude API (AI 채팅 기능 사용 시)
+ANTHROPIC_API_KEY=your_anthropic_api_key
 ```
 
 ## Architecture & Key Principles
@@ -38,22 +52,25 @@ npm run lint
 
 ```
 src/
-├── app/                      # Next.js App Router
-│   ├── layout.tsx           # 루트 레이아웃 (공통 HTML 구조)
-│   ├── page.tsx             # 홈페이지 (메뉴 목록)
-│   ├── globals.css          # 글로벌 CSS 및 커스텀 클래스
+├── app/
+│   ├── layout.tsx           # 루트 레이아웃
+│   ├── page.tsx             # 홈페이지
+│   ├── globals.css          # 글로벌 CSS + 커스텀 클래스
+│   ├── api/                 # API 라우트 (RESTful)
+│   │   ├── ai-chat/         # Claude AI 채팅 API
+│   │   ├── employees/       # 직원 CRUD
+│   │   ├── business-partners/ # 거래처 CRUD
+│   │   ├── contracts/       # 계약 관리
+│   │   ├── attendances/     # 출퇴근 기록
+│   │   ├── payslips/        # 급여명세서
+│   │   └── [기타 API 엔드포인트]
 │   ├── store-info/          # 점포 정보 관리
 │   ├── store-management/    # 점포 관리
 │   ├── contract-management/ # 계약 관리
 │   └── templates/           # 템플릿 관리
-└── components/              # 재사용 가능한 컴포넌트들
-    ├── Header.tsx           # 공통 헤더 (Whale ERP 브랜딩)
-    ├── Breadcrumb.tsx       # 페이지 네비게이션
-    ├── Button.tsx           # 버튼 (primary/secondary)
-    ├── Select.tsx           # 선택 컴포넌트
-    ├── StoreSelect.tsx      # 점포 선택 드롭다운
-    ├── TemplateCard.tsx     # 템플릿 카드 (드래그 가능)
-    └── [기타 UI 컴포넌트들]
+├── components/              # 재사용 컴포넌트
+└── lib/
+    └── supabase.ts          # Supabase 클라이언트 설정
 ```
 
 ### TypeScript Configuration
@@ -133,21 +150,54 @@ export default function ExamplePage() {
 - 인터랙티브한 기능 필요 시에만 `'use client'` 지시어 추가
 - 상태 관리, 이벤트 핸들러, 브라우저 API 사용 시 Client Component로 변환
 
-## Modern React 19.2 & Next.js 16 Features
+## Backend Architecture
 
-다음 최신 기능들을 적극 활용하세요:
+### Supabase Integration
 
-- **Server Components**: 기본값으로 사용, 서버에서 렌더링
-- **Server Actions**: 폼 제출 및 서버 측 데이터 변경 시 사용
-- **Streaming & Suspense**: 필요시 점진적 렌더링 적용
-- **Metadata API**: SEO 최적화를 위한 메타데이터 정의
+`src/lib/supabase.ts`에서 Supabase 클라이언트를 내보냅니다. API 라우트에서 사용:
 
-## ESLint Configuration
+```typescript
+import { supabase } from '@/lib/supabase';
 
-Next.js ESLint 프리셋 사용:
-- `eslint-config-next/core-web-vitals` - Core Web Vitals 규칙
-- `eslint-config-next/typescript` - TypeScript 전용 규칙
-- 제외 대상: `.next/`, `out/`, `build/`, `next-env.d.ts`
+// 예시: 데이터 조회
+const { data, error, count } = await supabase
+  .from('employees')
+  .select('*', { count: 'exact' })
+  .eq('is_deleted', false)
+  .order('created_at', { ascending: false });
+```
+
+### 주요 테이블 (Supabase)
+
+- `employees` - 직원 정보 (employee_id, name, position, contract_classification 등)
+- `business_partners` - 거래처/BP (company_name, brand_name, operation_status 등)
+- `employment_contracts` - 근로계약서
+- `contract_work_schedules` - 근무 스케줄
+- `contract_salaries` - 급여 정보
+- `attendance_records` - 출퇴근 기록
+- `stores` - 매장 정보
+
+### API Route Pattern
+
+모든 API는 Next.js Route Handlers 사용 (App Router):
+
+```typescript
+// src/app/api/[resource]/route.ts - 목록 조회/생성
+export async function GET(request: NextRequest) { ... }
+export async function POST(request: NextRequest) { ... }
+
+// src/app/api/[resource]/[id]/route.ts - 단일 조회/수정/삭제
+export async function GET(request: NextRequest, { params }) { ... }
+export async function PUT(request: NextRequest, { params }) { ... }
+export async function DELETE(request: NextRequest, { params }) { ... }
+```
+
+### AI Chat API (`/api/ai-chat`)
+
+Anthropic Claude API (claude-sonnet-4-20250514)를 사용한 Tool Use 패턴:
+- 데이터베이스 조회 도구 (get_employee_list, get_business_partner_count 등)
+- 대화 히스토리 유지
+- 자연어로 ERP 데이터 질의 가능
 
 ## Key Technologies
 
@@ -158,11 +208,13 @@ Next.js ESLint 프리셋 사용:
 | TypeScript | ^5 | 타입 안정성 |
 | Tailwind CSS | ^4 | 유틸리티 퍼스트 스타일링 |
 | React Compiler | 1.0.0 | 자동 React 최적화 |
+| Supabase | ^2.84.0 | 백엔드 데이터베이스 |
+| Anthropic SDK | ^0.71.0 | AI 채팅 기능 |
 
 ## Important Notes
 
 1. **한국어 우선**: 모든 설명, 추론 과정, 코드 주석은 한국어로 작성
-2. **모바일 우선**: 모든 UI는 모바일 화면을 먼저 고려하여 설계
-3. **최신 문법 사용**: React 19.2 및 Next.js 16의 최신 기능 적극 활용
-4. **컴포넌트 순수성**: React Compiler 요구사항 준수
-5. **스타일 일관성**: 기존 커스텀 클래스 패턴 참고 및 확장
+2. **모바일 우선**: 모바일 화면만 고려 (PC 해상도 무시)
+3. **React Compiler**: 수동 메모이제이션 불필요 (useMemo, useCallback, React.memo 사용 금지)
+4. **Soft Delete**: 모든 테이블에서 `is_deleted` 필드로 소프트 삭제 적용
+5. **pnpm 사용**: 패키지 관리자로 pnpm 권장
