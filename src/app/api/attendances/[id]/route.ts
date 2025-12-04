@@ -16,17 +16,17 @@ function formatMinutesToHours(minutes: number): string {
 
 /**
  * 날짜를 한글 형식으로 변환 (2025.11.14 (금))
+ * - YYYY-MM-DD 형식의 날짜를 직접 파싱하여 타임존 문제 방지
  */
 function formatDateKorean(dateStr: string): string {
-  const date = new Date(dateStr);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  // YYYY-MM-DD 형식을 직접 파싱하여 로컬 시간대로 처리
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
 
   const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
   const dayName = dayNames[date.getDay()];
 
-  return `${year}.${month}.${day} (${dayName})`;
+  return `${year}.${String(month).padStart(2, '0')}.${String(day).padStart(2, '0')} (${dayName})`;
 }
 
 /**
