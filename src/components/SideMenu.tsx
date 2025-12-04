@@ -157,7 +157,7 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
                   <div className="user-text-info">
                     <div className="user-role">Platform Manager</div>
                     <div className="user-store-name">
-                      동대문종합시장 1호점 (홍길동 admin)
+                      을지로3가점 (임꺽정 admin)
                     </div>
                   </div>
                 </div>

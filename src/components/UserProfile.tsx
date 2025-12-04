@@ -9,8 +9,8 @@ interface UserProfileProps {
 }
 
 export default function UserProfile({
-  userName = "홍길동",
-  storeName = "동대문종합시장 1호점",
+  userName = "임꺽정",
+  storeName = "을지로3가점",
   role = "admin",
   avatarUrl = "https://api.builder.io/api/v1/image/assets/TEMP/3e62ee98ee7bfa595b375e102f2ff9e5a2680729?width=96",
   onEditProfile,
