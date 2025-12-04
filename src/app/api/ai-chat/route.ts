@@ -609,7 +609,7 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       const koreaTime = new Date(today.getTime() + (9 * 60 * 60 * 1000));
       const todayStr = koreaTime.toISOString().split('T')[0];
 
-      // 오늘 출퇴근 기록 중 퇴근하지 않은 직원 조회
+      // 오늘 출퇴근 기록 조회 (attendance_status 조건 제거 - 실제 세션 데이터로 판단)
       let query = supabase
         .from('attendance_records')
         .select(`
@@ -621,7 +621,6 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
           total_work_minutes
         `)
         .eq('work_date', todayStr)
-        .eq('attendance_status', 'working')
         .or('is_deleted.eq.false,is_deleted.is.null');
 
       if (toolInput.store_id) {
@@ -643,11 +642,12 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       // 각 출퇴근 기록에 대해 세션 정보와 직원 정보 조회
       const workingEmployees = [];
       for (const record of records) {
-        // 세션 정보 조회 (퇴근 시간이 NULL인 경우만)
+        // 세션 정보 조회 (출근 기록이 있고 퇴근 시간이 NULL인 경우)
         const { data: sessions } = await supabase
           .from('attendance_sessions')
           .select('clock_in_time, clock_out_time')
           .eq('attendance_record_id', record.id)
+          .not('clock_in_time', 'is', null)
           .is('clock_out_time', null);
 
         if (sessions && sessions.length > 0) {
