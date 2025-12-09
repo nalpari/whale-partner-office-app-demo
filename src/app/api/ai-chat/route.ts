@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { supabase } from '@/lib/supabase';
+import { currentUser, getUserContextForAI } from '@/lib/userContext';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -276,6 +277,37 @@ const tools: Anthropic.Tool[] = [
     input_schema: {
       type: 'object' as const,
       properties: {},
+      required: [],
+    },
+  },
+  {
+    name: 'get_store_sales',
+    description: '특정 매장의 매출 정보를 조회합니다. "오늘 매출 알려줘", "이번 달 매출", "매장 실적 보여줘" 같은 요청에 사용합니다. 매장을 지정하지 않으면 현재 로그인한 사용자의 담당 매장(을지로3가점) 매출을 조회합니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        store_id: {
+          type: 'number',
+          description: '매장 ID. 지정하지 않으면 현재 사용자의 담당 매장(을지로3가점) ID 사용',
+        },
+        store_name: {
+          type: 'string',
+          description: '매장명으로 검색 (예: "강남점", "을지로3가점")',
+        },
+        date_range: {
+          type: 'string',
+          enum: ['today', 'yesterday', 'this_week', 'last_week', 'this_month', 'last_month', 'custom'],
+          description: '조회 기간. today=오늘, yesterday=어제, this_week=이번주, last_week=지난주, this_month=이번달, last_month=지난달',
+        },
+        start_date: {
+          type: 'string',
+          description: 'date_range가 custom일 때 시작 날짜 (YYYY-MM-DD 형식)',
+        },
+        end_date: {
+          type: 'string',
+          description: 'date_range가 custom일 때 종료 날짜 (YYYY-MM-DD 형식)',
+        },
+      },
       required: [],
     },
   },
@@ -779,6 +811,136 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       });
     }
 
+    case 'get_store_sales': {
+      // 날짜 범위 계산 (한국 시간 기준)
+      const now = new Date();
+      const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+      const todayStr = koreaTime.toISOString().split('T')[0];
+
+      let startDate: string;
+      let endDate: string;
+      const dateRange = (toolInput.date_range as string) || 'today';
+
+      switch (dateRange) {
+        case 'today':
+          startDate = todayStr;
+          endDate = todayStr;
+          break;
+        case 'yesterday': {
+          const yesterday = new Date(koreaTime);
+          yesterday.setDate(yesterday.getDate() - 1);
+          startDate = yesterday.toISOString().split('T')[0];
+          endDate = startDate;
+          break;
+        }
+        case 'this_week': {
+          const weekStart = new Date(koreaTime);
+          weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+          startDate = weekStart.toISOString().split('T')[0];
+          endDate = todayStr;
+          break;
+        }
+        case 'last_week': {
+          const lastWeekEnd = new Date(koreaTime);
+          lastWeekEnd.setDate(lastWeekEnd.getDate() - lastWeekEnd.getDay() - 1);
+          const lastWeekStart = new Date(lastWeekEnd);
+          lastWeekStart.setDate(lastWeekStart.getDate() - 6);
+          startDate = lastWeekStart.toISOString().split('T')[0];
+          endDate = lastWeekEnd.toISOString().split('T')[0];
+          break;
+        }
+        case 'this_month': {
+          const monthStart = new Date(koreaTime.getFullYear(), koreaTime.getMonth(), 1);
+          startDate = monthStart.toISOString().split('T')[0];
+          endDate = todayStr;
+          break;
+        }
+        case 'last_month': {
+          const lastMonthEnd = new Date(koreaTime.getFullYear(), koreaTime.getMonth(), 0);
+          const lastMonthStart = new Date(koreaTime.getFullYear(), koreaTime.getMonth() - 1, 1);
+          startDate = lastMonthStart.toISOString().split('T')[0];
+          endDate = lastMonthEnd.toISOString().split('T')[0];
+          break;
+        }
+        case 'custom':
+          startDate = (toolInput.start_date as string) || todayStr;
+          endDate = (toolInput.end_date as string) || todayStr;
+          break;
+        default:
+          startDate = todayStr;
+          endDate = todayStr;
+      }
+
+      // 매장 ID 결정 (지정하지 않으면 현재 사용자의 담당 매장 사용)
+      let storeId = toolInput.store_id as number | undefined;
+      let storeName = toolInput.store_name as string | undefined;
+      let resolvedStoreName = currentUser.storeName;
+
+      if (storeName && !storeId) {
+        // 매장명으로 매장 ID 조회
+        const { data: storeData } = await supabase
+          .from('stores')
+          .select('id, name')
+          .ilike('name', `%${storeName}%`)
+          .limit(1)
+          .single();
+
+        if (storeData) {
+          storeId = storeData.id;
+          resolvedStoreName = storeData.name;
+        }
+      }
+
+      // 매장 ID가 없으면 현재 사용자의 담당 매장 사용
+      if (!storeId) {
+        storeId = currentUser.storeId;
+        resolvedStoreName = currentUser.storeName;
+      }
+
+      // 주문 데이터 조회
+      const query = supabase
+        .from('orders')
+        .select('id, final_amount, status, created_at')
+        .eq('store_id', storeId)
+        .gte('created_at', `${startDate}T00:00:00`)
+        .lte('created_at', `${endDate}T23:59:59`);
+
+      const { data: orders, error } = await query;
+
+      if (error) return JSON.stringify({ error: error.message });
+
+      const totalOrders = orders?.length || 0;
+      const totalRevenue = orders?.reduce((sum, order) => sum + (order.final_amount || 0), 0) || 0;
+      const completedOrders = orders?.filter(o => o.status === 'COMPLETED')?.length || 0;
+      const cancelledOrders = orders?.filter(o => o.status === 'CANCELLED')?.length || 0;
+
+      // 기간 표시 문자열 생성
+      let periodLabel = '';
+      switch (dateRange) {
+        case 'today': periodLabel = '오늘'; break;
+        case 'yesterday': periodLabel = '어제'; break;
+        case 'this_week': periodLabel = '이번 주'; break;
+        case 'last_week': periodLabel = '지난 주'; break;
+        case 'this_month': periodLabel = '이번 달'; break;
+        case 'last_month': periodLabel = '지난 달'; break;
+        default: periodLabel = `${startDate} ~ ${endDate}`;
+      }
+
+      return JSON.stringify({
+        store_id: storeId,
+        store_name: resolvedStoreName,
+        period: periodLabel,
+        start_date: startDate,
+        end_date: endDate,
+        total_orders: totalOrders,
+        completed_orders: completedOrders,
+        cancelled_orders: cancelledOrders,
+        total_revenue: totalRevenue,
+        dataType: 'store_sales',
+        message: `${resolvedStoreName}의 ${periodLabel} 매출입니다. 총 ${totalOrders}건의 주문, 매출액 ${totalRevenue.toLocaleString()}원입니다.`
+      });
+    }
+
     default:
       return JSON.stringify({ error: '알 수 없는 도구입니다.' });
   }
@@ -795,9 +957,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 사용자 컨텍스트 가져오기
+    const userContext = getUserContextForAI();
+
     // 시스템 프롬프트
     const systemPrompt = `당신은 Whale ERP 시스템의 AI 어시스턴트입니다.
 사용자가 비즈니스 관련 질문을 하면 적절한 도구를 사용하여 데이터베이스에서 정보를 조회하고 답변합니다.
+
+${userContext}
 
 ## 도메인 용어집
 사용자가 아래 용어나 약어를 사용하면 해당 의미로 이해하세요:
@@ -817,6 +984,7 @@ export async function POST(request: NextRequest) {
 - 매장(점포) 목록 조회, 상세 정보 조회, 개수 확인
 - 메뉴 정보 조회
 - 주문/매출 정보 요약
+- **매장별 매출 조회 (오늘/어제/이번주/지난주/이번달/지난달)**
 
 ## 응답 규칙
 - 답변은 항상 친절하고 간결하게 한국어로 해주세요.
@@ -874,7 +1042,20 @@ export async function POST(request: NextRequest) {
 |--------|---------|--------|---------|--------|
 | 김철수 | 정직원 | 강남점 | 09:00 | 010-1234-5678 |
 
-현재 근무 중인 직원은 오늘 출근했지만 아직 퇴근 기록이 없는 직원입니다.`;
+현재 근무 중인 직원은 오늘 출근했지만 아직 퇴근 기록이 없는 직원입니다.
+
+### 매출 정보 예시
+📊 **을지로3가점** 오늘 매출 현황
+
+| 항목 | 값 |
+|------|-----|
+| 조회 기간 | 2024-12-09 (오늘) |
+| 총 주문 수 | 45건 |
+| 완료 주문 | 42건 |
+| 취소 주문 | 3건 |
+| 총 매출액 | 1,234,500원 |
+
+매출 조회 시 특정 매장을 언급하지 않으면 현재 로그인한 사용자의 담당 매장(을지로3가점) 데이터를 조회합니다.`;
 
     // 대화 메시지 구성
     const messages: Anthropic.MessageParam[] = [
