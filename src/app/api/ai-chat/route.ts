@@ -873,7 +873,7 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
 
       // 매장 ID 결정 (지정하지 않으면 현재 사용자의 담당 매장 사용)
       let storeId = toolInput.store_id as number | undefined;
-      let storeName = toolInput.store_name as string | undefined;
+      const storeName = toolInput.store_name as string | undefined;
       let resolvedStoreName = currentUser.storeName;
 
       if (storeName && !storeId) {
