@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Whale Partner Office App Demo** - Next.js 16.0.3 기반의 **모바일 우선** ERP 관리 시스템입니다. Next.js App Router, React 19.2.0, TypeScript, Tailwind CSS v4를 사용하며, React Compiler가 활성화되어 있습니다. Supabase를 백엔드 데이터베이스로 사용하고, Anthropic Claude API를 통한 AI 채팅 기능을 제공합니다.
+**Whale Partner Office App Demo** - Next.js 16.0.7 기반의 **모바일 우선** ERP 관리 시스템입니다. Next.js App Router, React 19.2.1, TypeScript, Tailwind CSS v4를 사용하며, React Compiler가 활성화되어 있습니다. Supabase를 백엔드 데이터베이스로 사용하고, Anthropic Claude API를 통한 AI 채팅 기능을 제공합니다.
 
 ## Development Commands
 
@@ -175,7 +175,17 @@ const { data, error, count } = await supabase
 - `contract_work_schedules` - 근무 스케줄
 - `contract_salaries` - 급여 정보
 - `attendance_records` - 출퇴근 기록
+- `attendance_sessions` - 출퇴근 세션 (출근/퇴근 시간 기록)
 - `stores` - 매장 정보
+- `orders` - 주문 정보 (payment_type: CARD/CASH/TRANSFER/OTHER)
+- `menu` - 메뉴 정보
+
+### 사용자 컨텍스트 (`src/lib/userContext.ts`)
+
+현재 로그인 기능이 없어 하드코딩된 사용자 정보 사용:
+- 기본 사용자: 임꺽정 (Platform Manager)
+- 담당 매장: 을지로3가점 (ID: 6)
+- 매출/주문 조회 시 기본적으로 담당 매장 데이터 사용
 
 ### API Route Pattern
 
@@ -203,8 +213,8 @@ Anthropic Claude API (claude-sonnet-4-20250514)를 사용한 Tool Use 패턴:
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| Next.js | 16.0.3 | React 프레임워크 (App Router) |
-| React | 19.2.0 | UI 라이브러리 |
+| Next.js | 16.0.7 | React 프레임워크 (App Router) |
+| React | 19.2.1 | UI 라이브러리 |
 | TypeScript | ^5 | 타입 안정성 |
 | Tailwind CSS | ^4 | 유틸리티 퍼스트 스타일링 |
 | React Compiler | 1.0.0 | 자동 React 최적화 |
@@ -218,3 +228,7 @@ Anthropic Claude API (claude-sonnet-4-20250514)를 사용한 Tool Use 패턴:
 3. **React Compiler**: 수동 메모이제이션 불필요 (useMemo, useCallback, React.memo 사용 금지)
 4. **Soft Delete**: 모든 테이블에서 `is_deleted` 필드로 소프트 삭제 적용
 5. **pnpm 사용**: 패키지 관리자로 pnpm 권장
+
+## Memo
+- 모든 답변과 추론과정은 한국어로 해줘.
+- 이 앱에서 사용하는 supabase 프로젝트는 'coffee-assistant-with-ai' 이야. 잊지 말고 참고해.

@@ -273,16 +273,22 @@ const tools: Anthropic.Tool[] = [
   },
   {
     name: 'get_order_summary',
-    description: '주문 요약 정보를 조회합니다 (총 주문 수, 총 매출 등).',
+    description: '주문 요약 정보를 조회합니다 (총 주문 수, 총 매출 등). 결제 수단별로 필터링할 수 있습니다.',
     input_schema: {
       type: 'object' as const,
-      properties: {},
+      properties: {
+        payment_type: {
+          type: 'string',
+          enum: ['ALL', 'CARD', 'CASH', 'TRANSFER', 'OTHER'],
+          description: '결제 수단 필터. ALL은 전체, CARD는 카드결제, CASH는 현금결제, TRANSFER는 계좌이체, OTHER는 기타',
+        },
+      },
       required: [],
     },
   },
   {
     name: 'get_store_sales',
-    description: '특정 매장의 매출 정보를 조회합니다. "오늘 매출 알려줘", "이번 달 매출", "매장 실적 보여줘" 같은 요청에 사용합니다. 매장을 지정하지 않으면 현재 로그인한 사용자의 담당 매장(을지로3가점) 매출을 조회합니다.',
+    description: '특정 매장의 매출 정보를 조회합니다. "오늘 매출 알려줘", "12월 12일 매출", "이번 달 매출", "카드 매출 알려줘" 같은 요청에 사용합니다. 매장을 지정하지 않으면 현재 로그인한 사용자의 담당 매장(을지로3가점) 매출을 조회합니다. 특정 날짜(예: 12월 12일)를 물으면 date_range를 today로 설정하세요 - 오늘 날짜와 같으면 today, 어제면 yesterday를 사용합니다.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -297,15 +303,20 @@ const tools: Anthropic.Tool[] = [
         date_range: {
           type: 'string',
           enum: ['today', 'yesterday', 'this_week', 'last_week', 'this_month', 'last_month', 'custom'],
-          description: '조회 기간. today=오늘, yesterday=어제, this_week=이번주, last_week=지난주, this_month=이번달, last_month=지난달',
+          description: '조회 기간. today=오늘(특정 날짜가 오늘이면 today 사용), yesterday=어제, this_week=이번주, last_week=지난주, this_month=이번달, last_month=지난달. 특정 날짜 요청시 오늘/어제가 아니면 custom 사용.',
         },
         start_date: {
           type: 'string',
-          description: 'date_range가 custom일 때 시작 날짜 (YYYY-MM-DD 형식)',
+          description: 'date_range가 custom일 때 시작 날짜. 반드시 YYYY-MM-DD 형식 (예: 2025-12-12). 연도를 반드시 포함해야 함.',
         },
         end_date: {
           type: 'string',
-          description: 'date_range가 custom일 때 종료 날짜 (YYYY-MM-DD 형식)',
+          description: 'date_range가 custom일 때 종료 날짜. 반드시 YYYY-MM-DD 형식 (예: 2025-12-12). 연도를 반드시 포함해야 함. 하루 매출 조회시 start_date와 동일하게 설정.',
+        },
+        payment_type: {
+          type: 'string',
+          enum: ['ALL', 'CARD', 'CASH', 'TRANSFER', 'OTHER'],
+          description: '결제 수단 필터. ALL은 전체, CARD는 카드결제, CASH는 현금결제, TRANSFER는 계좌이체, OTHER는 기타. "카드 매출", "현금 매출" 요청시 사용.',
         },
       },
       required: [],
@@ -641,8 +652,11 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       const koreaTime = new Date(today.getTime() + (9 * 60 * 60 * 1000));
       const todayStr = koreaTime.toISOString().split('T')[0];
 
+      // 매장 ID가 없으면 현재 사용자의 담당 매장 사용
+      const storeId = (toolInput.store_id as number) || currentUser.storeId;
+
       // 오늘 출퇴근 기록 조회 (attendance_status 조건 제거 - 실제 세션 데이터로 판단)
-      let query = supabase
+      const query = supabase
         .from('attendance_records')
         .select(`
           id,
@@ -653,11 +667,8 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
           total_work_minutes
         `)
         .eq('work_date', todayStr)
+        .eq('store_id', storeId)
         .or('is_deleted.eq.false,is_deleted.is.null');
-
-      if (toolInput.store_id) {
-        query = query.eq('store_id', toolInput.store_id);
-      }
 
       const { data: records, error: recordError } = await query;
       if (recordError) return JSON.stringify({ error: recordError.message });
@@ -666,8 +677,10 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
         return JSON.stringify({
           data: [],
           count: 0,
+          store_id: storeId,
+          store_name: currentUser.storeName,
           dataType: 'current_working',
-          message: `오늘(${todayStr}) 현재 근무 중인 직원이 없습니다.`
+          message: `${currentUser.storeName}에 오늘(${todayStr}) 현재 근무 중인 직원이 없습니다.`
         });
       }
 
@@ -706,11 +719,13 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       return JSON.stringify({
         data: workingEmployees,
         count: workingEmployees.length,
+        store_id: storeId,
+        store_name: currentUser.storeName,
         dataType: 'current_working',
         today: todayStr,
         message: workingEmployees.length > 0
-          ? `현재 ${workingEmployees.length}명이 근무 중입니다.`
-          : `오늘(${todayStr}) 현재 근무 중인 직원이 없습니다.`
+          ? `${currentUser.storeName}에 현재 ${workingEmployees.length}명이 근무 중입니다.`
+          : `${currentUser.storeName}에 오늘(${todayStr}) 현재 근무 중인 직원이 없습니다.`
       });
     }
 
@@ -795,27 +810,55 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
     }
 
     case 'get_order_summary': {
-      const { data: orders, error } = await supabase
+      let query = supabase
         .from('orders')
-        .select('id, final_amount, status');
+        .select('id, final_amount, status, payment_type');
+
+      // 결제 수단 필터 적용
+      if (toolInput.payment_type && toolInput.payment_type !== 'ALL') {
+        query = query.eq('payment_type', toolInput.payment_type);
+      }
+
+      const { data: orders, error } = await query;
 
       if (error) return JSON.stringify({ error: error.message });
 
       const totalOrders = orders?.length || 0;
       const totalRevenue = orders?.reduce((sum, order) => sum + (order.final_amount || 0), 0) || 0;
 
+      // 결제 수단별 집계
+      const paymentStats = orders?.reduce((acc, order) => {
+        const type = order.payment_type || 'OTHER';
+        if (!acc[type]) {
+          acc[type] = { count: 0, amount: 0 };
+        }
+        acc[type].count += 1;
+        acc[type].amount += order.final_amount || 0;
+        return acc;
+      }, {} as Record<string, { count: number; amount: number }>) || {};
+
+      const paymentTypeLabel = toolInput.payment_type && toolInput.payment_type !== 'ALL'
+        ? ` (${toolInput.payment_type === 'CARD' ? '카드결제' : toolInput.payment_type === 'CASH' ? '현금결제' : toolInput.payment_type === 'TRANSFER' ? '계좌이체' : '기타'})`
+        : '';
+
       return JSON.stringify({
         totalOrders,
         totalRevenue,
-        message: `총 ${totalOrders}건의 주문이 있으며, 총 매출은 ${totalRevenue.toLocaleString()}원입니다.`
+        payment_type_filter: toolInput.payment_type || 'ALL',
+        payment_stats: paymentStats,
+        message: `총 ${totalOrders}건의 주문${paymentTypeLabel}이 있으며, 총 매출은 ${totalRevenue.toLocaleString()}원입니다.`
       });
     }
 
     case 'get_store_sales': {
+      // 디버그: 입력 파라미터 로깅
+      console.log('[get_store_sales] toolInput:', JSON.stringify(toolInput));
+
       // 날짜 범위 계산 (한국 시간 기준)
       const now = new Date();
       const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
       const todayStr = koreaTime.toISOString().split('T')[0];
+      const currentYear = koreaTime.getFullYear();
 
       let startDate: string;
       let endDate: string;
@@ -862,10 +905,28 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
           endDate = lastMonthEnd.toISOString().split('T')[0];
           break;
         }
-        case 'custom':
-          startDate = (toolInput.start_date as string) || todayStr;
-          endDate = (toolInput.end_date as string) || todayStr;
+        case 'custom': {
+          // 날짜 형식 보정 함수 (연도 없으면 현재 연도 추가)
+          const fixDateFormat = (dateStr: string): string => {
+            if (!dateStr) return todayStr;
+            // 이미 YYYY-MM-DD 형식이면 그대로 반환
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+            // MM-DD 형식이면 현재 연도 추가
+            if (/^\d{2}-\d{2}$/.test(dateStr)) return `${currentYear}-${dateStr}`;
+            // M-D 또는 MM-D 등 형식이면 파싱 후 보정
+            const parts = dateStr.split('-');
+            if (parts.length === 2) {
+              const month = parts[0].padStart(2, '0');
+              const day = parts[1].padStart(2, '0');
+              return `${currentYear}-${month}-${day}`;
+            }
+            return todayStr;
+          };
+          startDate = fixDateFormat(toolInput.start_date as string);
+          endDate = fixDateFormat(toolInput.end_date as string);
+          console.log('[get_store_sales] custom dates - start:', startDate, 'end:', endDate);
           break;
+        }
         default:
           startDate = todayStr;
           endDate = todayStr;
@@ -898,12 +959,18 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       }
 
       // 주문 데이터 조회
-      const query = supabase
+      let query = supabase
         .from('orders')
-        .select('id, final_amount, status, created_at')
+        .select('id, final_amount, status, created_at, payment_type')
         .eq('store_id', storeId)
         .gte('created_at', `${startDate}T00:00:00`)
         .lte('created_at', `${endDate}T23:59:59`);
+
+      // 결제 수단 필터 적용
+      const paymentTypeFilter = toolInput.payment_type as string | undefined;
+      if (paymentTypeFilter && paymentTypeFilter !== 'ALL') {
+        query = query.eq('payment_type', paymentTypeFilter);
+      }
 
       const { data: orders, error } = await query;
 
@@ -913,6 +980,17 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       const totalRevenue = orders?.reduce((sum, order) => sum + (order.final_amount || 0), 0) || 0;
       const completedOrders = orders?.filter(o => o.status === 'COMPLETED')?.length || 0;
       const cancelledOrders = orders?.filter(o => o.status === 'CANCELLED')?.length || 0;
+
+      // 결제 수단별 집계
+      const paymentStats = orders?.reduce((acc, order) => {
+        const type = order.payment_type || 'OTHER';
+        if (!acc[type]) {
+          acc[type] = { count: 0, amount: 0 };
+        }
+        acc[type].count += 1;
+        acc[type].amount += order.final_amount || 0;
+        return acc;
+      }, {} as Record<string, { count: number; amount: number }>) || {};
 
       // 기간 표시 문자열 생성
       let periodLabel = '';
@@ -926,6 +1004,11 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
         default: periodLabel = `${startDate} ~ ${endDate}`;
       }
 
+      // 결제 수단 라벨
+      const paymentTypeLabel = paymentTypeFilter && paymentTypeFilter !== 'ALL'
+        ? ` (${paymentTypeFilter === 'CARD' ? '카드결제' : paymentTypeFilter === 'CASH' ? '현금결제' : paymentTypeFilter === 'TRANSFER' ? '계좌이체' : '기타'})`
+        : '';
+
       return JSON.stringify({
         store_id: storeId,
         store_name: resolvedStoreName,
@@ -936,8 +1019,10 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
         completed_orders: completedOrders,
         cancelled_orders: cancelledOrders,
         total_revenue: totalRevenue,
+        payment_type_filter: paymentTypeFilter || 'ALL',
+        payment_stats: paymentStats,
         dataType: 'store_sales',
-        message: `${resolvedStoreName}의 ${periodLabel} 매출입니다. 총 ${totalOrders}건의 주문, 매출액 ${totalRevenue.toLocaleString()}원입니다.`
+        message: `${resolvedStoreName}의 ${periodLabel}${paymentTypeLabel} 매출입니다. 총 ${totalOrders}건의 주문, 매출액 ${totalRevenue.toLocaleString()}원입니다.`
       });
     }
 
@@ -985,6 +1070,9 @@ ${userContext}
 - 메뉴 정보 조회
 - 주문/매출 정보 요약
 - **매장별 매출 조회 (오늘/어제/이번주/지난주/이번달/지난달)**
+
+## 처리할 수 없는 요청
+위에 명시된 "당신이 할 수 있는 일" 이외의 요청에 대해서는 반드시 "해당 요청은 처리할 수 없습니다."라고만 응답하세요. 추가 설명이나 지원 가능한 업무 목록을 나열하지 마세요.
 
 ## 응답 규칙
 - 답변은 항상 친절하고 간결하게 한국어로 해주세요.
@@ -1044,16 +1132,25 @@ ${userContext}
 
 현재 근무 중인 직원은 오늘 출근했지만 아직 퇴근 기록이 없는 직원입니다.
 
-### 매출 정보 예시
-📊 **을지로3가점** 오늘 매출 현황
+### 일 매출 응답 형식 (중요!)
+오늘/어제/특정일 매출을 묻는 질문에는 **반드시** 아래 형식으로 간단하게 답변하세요:
+- "오늘 매출은 1,234,500원입니다."
+- "어제 매출은 987,000원입니다."
+- "12월 10일 매출은 500,000원입니다."
 
-| 항목 | 값 |
-|------|-----|
-| 조회 기간 | 2024-12-09 (오늘) |
-| 총 주문 수 | 45건 |
-| 완료 주문 | 42건 |
-| 취소 주문 | 3건 |
-| 총 매출액 | 1,234,500원 |
+표나 추가 정보 없이 한 문장으로 간결하게 답변합니다.
+
+### 기간 매출 응답 형식
+이번주/이번달 등 기간 매출을 묻는 질문에는 간단히 답변:
+- "이번주 매출은 5,500,000원입니다."
+- "이번달 매출은 23,400,000원입니다."
+
+### 매출 비교 응답 형식 (중요!)
+"11월과 12월 매출 비교해줘", "이번달과 저번달 매출 비교" 같은 매출 비교 요청에는 **반드시** 아래 형식으로 간단하게 답변하세요:
+- "11월은 12,345,000원, 12월은 15,678,000원, 3,333,000원 증가했습니다."
+- "10월은 8,000,000원, 11월은 6,500,000원, 1,500,000원 감소했습니다."
+
+표나 추가 분석 없이 한 문장으로 간결하게 답변합니다. 증가/감소 여부만 명시하세요.
 
 매출 조회 시 특정 매장을 언급하지 않으면 현재 로그인한 사용자의 담당 매장(을지로3가점) 데이터를 조회합니다.`;
 
@@ -1074,29 +1171,33 @@ ${userContext}
 
     // 도구 사용이 필요한 경우 처리
     while (response.stop_reason === 'tool_use') {
-      const toolUseBlock = response.content.find(
+      // 모든 tool_use 블록 찾기
+      const toolUseBlocks = response.content.filter(
         (block): block is Anthropic.ToolUseBlock => block.type === 'tool_use'
       );
 
-      if (!toolUseBlock) break;
+      if (toolUseBlocks.length === 0) break;
 
-      // 도구 실행
-      const toolResult = await executeTool(
-        toolUseBlock.name,
-        toolUseBlock.input as Record<string, unknown>
+      // 모든 도구 병렬 실행
+      const toolResults = await Promise.all(
+        toolUseBlocks.map(async (toolUseBlock) => {
+          const result = await executeTool(
+            toolUseBlock.name,
+            toolUseBlock.input as Record<string, unknown>
+          );
+          return {
+            type: 'tool_result' as const,
+            tool_use_id: toolUseBlock.id,
+            content: result,
+          };
+        })
       );
 
       // 도구 결과와 함께 다시 API 호출
       messages.push({ role: 'assistant', content: response.content });
       messages.push({
         role: 'user',
-        content: [
-          {
-            type: 'tool_result',
-            tool_use_id: toolUseBlock.id,
-            content: toolResult,
-          },
-        ],
+        content: toolResults,
       });
 
       response = await anthropic.messages.create({
@@ -1125,8 +1226,9 @@ ${userContext}
     });
   } catch (error) {
     console.error('AI Chat API error:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: 'AI 응답 생성 중 오류가 발생했습니다.' },
+      { error: 'AI 응답 생성 중 오류가 발생했습니다.', details: errorMessage },
       { status: 500 }
     );
   }

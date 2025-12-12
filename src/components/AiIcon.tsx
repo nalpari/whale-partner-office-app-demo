@@ -10,10 +10,22 @@ export default function AiIcon({ size = 82, className = "", onClick }: AiIconPro
   const iconSize = size * 0.5122;
   const padding = size * 0.2432;
 
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onClick) {
+      try {
+        onClick();
+      } catch (error) {
+        console.error("AI Icon click error:", error);
+      }
+    }
+  };
+
   return (
     <div
       className={`ai-icon-container ${className}`}
-      onClick={onClick}
+      onClick={handleClick}
       style={{
         width: `${size}px`,
         height: `${size}px`,
@@ -28,6 +40,7 @@ export default function AiIcon({ size = 82, className = "", onClick }: AiIconPro
         style={{
           width: `${iconSize}px`,
           height: `${iconSize}px`,
+          pointerEvents: "none",
         }}
       />
     </div>

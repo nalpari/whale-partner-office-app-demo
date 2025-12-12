@@ -1,13 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Header from "@/components/Header";
-import FloatingButton from "@/components/FloatingButton";
-import AiChatScreen from "@/components/AiChatScreen";
 import Link from "next/link";
 
 export default function Home() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const menuItems = [
     {
@@ -64,13 +60,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-
-      {/* <FloatingButton
-        onClick={() => setIsChatOpen(true)}
-        isVisible={!isChatOpen}
-      /> */}
-
-      <AiChatScreen isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </>
   );
 }

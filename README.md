@@ -20,13 +20,15 @@
   - 직원, BP, 매장 정보 조회
   - 근무 스케줄, 급여 정보 질의
   - 현재 근무 중인 직원 확인
+  - **매장별 매출 조회** (오늘/어제/이번주/이번달 등)
+  - **결제 수단별 매출 조회** (카드/현금/계좌이체)
 
 ## 기술 스택
 
 | 분류 | 기술 | 버전 |
 |------|------|------|
-| **프레임워크** | Next.js (App Router) | 16.0.3 |
-| **UI** | React | 19.2.0 |
+| **프레임워크** | Next.js (App Router) | 16.0.7 |
+| **UI** | React | 19.2.1 |
 | **언어** | TypeScript | ^5 |
 | **스타일링** | Tailwind CSS | v4 |
 | **최적화** | React Compiler | 1.0.0 |
@@ -44,7 +46,8 @@ src/
 │   │   ├── business-partners/    # BP CRUD
 │   │   ├── contracts/            # 계약 관리
 │   │   ├── attendances/          # 출퇴근 관리
-│   │   └── payslips/             # 급여명세서
+│   │   ├── payslips/             # 급여명세서
+│   │   └── store-status/         # 매장 현황 (매출, 근무 직원)
 │   ├── employee-management/      # 직원 관리 페이지
 │   ├── business-partner/         # BP 관리 페이지
 │   ├── employment-contract/      # 근로계약서 페이지
@@ -53,9 +56,10 @@ src/
 │   ├── store-info/               # 점포 정보 페이지
 │   ├── store-management/         # 점포 관리 페이지
 │   └── templates/                # 템플릿 관리 페이지
-├── components/                   # 재사용 컴포넌트 (57개)
+├── components/                   # 재사용 컴포넌트
 └── lib/
-    └── supabase.ts               # Supabase 클라이언트
+    ├── supabase.ts               # Supabase 클라이언트
+    └── userContext.ts            # 사용자 컨텍스트 (하드코딩)
 ```
 
 ### 주요 컴포넌트
@@ -119,7 +123,38 @@ pnpm lint
 | `/api/contracts` | GET, POST | 계약 목록/생성 |
 | `/api/attendances` | GET, POST | 출퇴근 목록/생성 |
 | `/api/payslips` | GET, POST | 급여명세서 목록/생성 |
+| `/api/store-status` | GET | 매장 현황 (오늘 매출, 결제 수단별 매출, 근무 직원) |
 | `/api/ai-chat` | POST | AI 채팅 (Tool Use) |
+
+## 데이터베이스 (Supabase)
+
+### 주요 테이블
+
+| 테이블 | 설명 |
+|--------|------|
+| `employees` | 직원 정보 (employee_id, name, position, contract_classification) |
+| `business_partners` | 거래처/BP (company_name, brand_name, operation_status) |
+| `employment_contracts` | 근로계약서 |
+| `contract_work_schedules` | 근무 스케줄 |
+| `contract_salaries` | 급여 정보 |
+| `attendance_records` | 출퇴근 기록 |
+| `attendance_sessions` | 출퇴근 세션 (출근/퇴근 시간) |
+| `stores` | 매장 정보 |
+| `orders` | 주문 정보 |
+| `menu` | 메뉴 정보 |
+
+### 결제 수단 (orders.payment_type)
+
+| 값 | 설명 |
+|---|---|
+| `CARD` | 카드결제 (기본값) |
+| `CASH` | 현금결제 |
+| `TRANSFER` | 계좌이체 |
+| `OTHER` | 기타 |
+
+### 공통 규칙
+- 모든 테이블에 `is_deleted` 필드 사용 (Soft Delete)
+- 조회 시 항상 `.eq('is_deleted', false)` 조건 적용
 
 ## 주요 설정
 

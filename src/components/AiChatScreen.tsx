@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import AiChatHeader from "./AiChatHeader";
 import ChatMessage from "./ChatMessage";
 
@@ -21,6 +21,15 @@ interface ConversationMessage {
   content: string;
 }
 
+interface StoreStatus {
+  store_name: string;
+  today_sales: number;
+  deposit_amount: number;
+  withdraw_amount: number;
+  working_employees: string[];
+  date: string;
+}
+
 function getCurrentTimestamp(): string {
   const now = new Date();
   const hours = now.getHours();
@@ -32,24 +41,63 @@ function getCurrentTimestamp(): string {
   return `${period} ${displayHours}:${minutes}  ${dayName}`;
 }
 
+function formatStoreStatusMessage(status: StoreStatus): string {
+  const employeeText = status.working_employees.length > 0
+    ? status.working_employees.join(', ')
+    : '없음';
+
+  return `오늘 매장 현황
+• 오늘 매출액 : ${status.today_sales.toLocaleString()}원
+• 입금액 : ${status.deposit_amount.toLocaleString()}원
+• 출금액 : ${status.withdraw_amount.toLocaleString()}원
+• 현재 근무중인 직원 : ${employeeText}`;
+}
+
 export default function AiChatScreen({ isOpen, onClose }: AiChatScreenProps) {
-  const getInitialMessage = (): Message => ({
+  const getLoadingMessage = (): Message => ({
     type: "bot",
-    message: "안녕하세요, Whale ERP AI 어시스턴트입니다.\n무엇을 도와드릴까요?\n\n예시 질문:\n• Business Partner는 총 몇 명이야?\n• 직원 수 알려줘\n• 매장은 몇 개야?",
+    message: "매장 현황을 불러오는 중...",
     timestamp: getCurrentTimestamp(),
   });
 
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState<Message[]>([getInitialMessage()]);
+  const [messages, setMessages] = useState<Message[]>([getLoadingMessage()]);
   const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const fetchStoreStatus = useCallback(async () => {
+    try {
+      const response = await fetch("/api/store-status");
+      const data: StoreStatus = await response.json();
+
+      const statusMessage: Message = {
+        type: "bot",
+        message: formatStoreStatusMessage(data),
+        timestamp: getCurrentTimestamp(),
+      };
+
+      setMessages([statusMessage]);
+    } catch (error) {
+      console.error("Store status fetch error:", error);
+      setMessages([{
+        type: "bot",
+        message: "매장 현황을 불러오는데 실패했습니다.\n무엇을 도와드릴까요?",
+        timestamp: getCurrentTimestamp(),
+      }]);
+    } finally {
+      setIsInitialLoading(false);
+    }
+  }, []);
+
   const handleReset = () => {
-    setMessages([getInitialMessage()]);
+    setIsInitialLoading(true);
+    setMessages([getLoadingMessage()]);
     setConversationHistory([]);
     setInputValue("");
     setIsLoading(false);
+    fetchStoreStatus();
   };
 
   const scrollToBottom = () => {
@@ -61,16 +109,28 @@ export default function AiChatScreen({ isOpen, onClose }: AiChatScreenProps) {
   }, [messages]);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+    try {
+      if (isOpen) {
+        document.body.style.overflow = "hidden";
+        // 채팅창 열릴 때 매장 현황 로드
+        if (isInitialLoading) {
+          fetchStoreStatus();
+        }
+      } else {
+        document.body.style.overflow = "";
+      }
+    } catch (error) {
+      console.error("AI ChatScreen effect error:", error);
     }
 
     return () => {
-      document.body.style.overflow = "";
+      try {
+        document.body.style.overflow = "";
+      } catch (error) {
+        console.error("AI ChatScreen cleanup error:", error);
+      }
     };
-  }, [isOpen]);
+  }, [isOpen, isInitialLoading, fetchStoreStatus]);
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
@@ -142,7 +202,7 @@ export default function AiChatScreen({ isOpen, onClose }: AiChatScreenProps) {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -176,7 +236,7 @@ export default function AiChatScreen({ isOpen, onClose }: AiChatScreenProps) {
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyDown}
                 placeholder="메시지를 입력하세요..."
                 className="ai-chat-input"
                 disabled={isLoading}
