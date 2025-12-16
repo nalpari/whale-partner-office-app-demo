@@ -333,6 +333,14 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
                         <PageIcon />
                         출퇴근 현황
                       </Link>
+                      <Link
+                        href="/store-work-schedule"
+                        className="nav-item-sub-link"
+                        onClick={handleClose}
+                      >
+                        <PageIcon />
+                        점포별 근무 계획표
+                      </Link>
                       <div className="nav-item-sub">
                         <PageIcon />
                         TODO List
