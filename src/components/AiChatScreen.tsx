@@ -57,15 +57,28 @@ export default function AiChatScreen({ isOpen, onClose }: AiChatScreenProps) {
   const getLoadingMessage = (): Message => ({
     type: "bot",
     message: "매장 현황을 불러오는 중...",
-    timestamp: getCurrentTimestamp(),
+    timestamp: "",
   });
 
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<Message[]>([getLoadingMessage()]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // 클라이언트에서만 timestamp 업데이트 (hydration 에러 방지)
+  useEffect(() => {
+    setIsMounted(true);
+    if (!isMounted && messages.length === 1 && messages[0].timestamp === "") {
+      setMessages([{
+        ...messages[0],
+        timestamp: getCurrentTimestamp(),
+      }]);
+    }
+  }, [isMounted, messages]);
   const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const fetchStoreStatus = useCallback(async () => {
     try {
@@ -107,6 +120,20 @@ export default function AiChatScreen({ isOpen, onClose }: AiChatScreenProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // 응답 완료 시 입력 필드에 포커스
+  useEffect(() => {
+    if (!isLoading && messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      // 마지막 메시지가 bot 응답이고 로딩 중이 아닐 때 포커스
+      if (lastMessage.type === "bot" && !lastMessage.isLoading) {
+        // 약간의 지연을 두어 스크롤이 완료된 후 포커스
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 100);
+      }
+    }
+  }, [isLoading, messages]);
 
   useEffect(() => {
     try {
@@ -233,6 +260,7 @@ export default function AiChatScreen({ isOpen, onClose }: AiChatScreenProps) {
           <div className="ai-chat-input-wrapper">
             <div className="ai-chat-input-box">
               <input
+                ref={inputRef}
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}

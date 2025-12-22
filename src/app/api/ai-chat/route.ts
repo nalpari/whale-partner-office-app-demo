@@ -88,7 +88,7 @@ const tools: Anthropic.Tool[] = [
   },
   {
     name: 'get_employee_list',
-    description: '직원 목록을 조회합니다. "직원 리스트 보여줘", "직원 목록 보여줘" 같은 요청에 사용합니다.',
+    description: '직원 목록을 조회합니다. "직원 리스트 보여줘", "직원 목록 보여줘", "을지로3가점 소속 직원", "특정 매장 직원" 같은 요청에 사용합니다.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -106,6 +106,10 @@ const tools: Anthropic.Tool[] = [
           type: 'string',
           enum: ['근무', '퇴사'],
           description: '근무 상태 필터',
+        },
+        workplace_name: {
+          type: 'string',
+          description: '근무지(매장명) 필터. 예: "을지로3가점", "강남점" 등. 특정 매장의 직원만 조회할 때 사용.',
         },
         search: {
           type: 'string',
@@ -166,7 +170,7 @@ const tools: Anthropic.Tool[] = [
   },
   {
     name: 'get_employee_salary',
-    description: '직원의 급여 정보(연봉, 월급, 시급)를 조회합니다. "정직원 급여 알려줘", "홍길동 시급 보여줘", "직원 연봉 얼마야?", "월급 정보 보여줘" 같은 요청에 사용합니다.',
+    description: '직원의 급여 정보(연봉, 월급, 시급)를 조회합니다. 근로계약서의 내용을 참조하여 계약 상태, 계약 기간, 급여 지급 주기, 업무 설명 등도 함께 제공합니다. "정직원 급여 알려줘", "홍길동 시급 보여줘", "직원 연봉 얼마야?", "월급 정보 보여줘" 같은 요청에 사용합니다.',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -201,6 +205,73 @@ const tools: Anthropic.Tool[] = [
         store_id: {
           type: 'number',
           description: '특정 매장의 근무 중인 직원만 조회 (선택사항)',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'get_employee_work_hours',
+    description: '직원의 실제 근무시간을 출퇴근 데이터를 기반으로 계산합니다. "홍길동 이번주 근무시간", "정직원 이번달 근무시간", "을지로3가점 직원 근무시간", "오늘 근무시간" 같은 요청에 사용합니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        employee_name: {
+          type: 'string',
+          description: '특정 직원 이름으로 검색 (예: "홍길동")',
+        },
+        employee_id: {
+          type: 'number',
+          description: '특정 직원 ID로 검색',
+        },
+        workplace_name: {
+          type: 'string',
+          description: '근무지(매장명) 필터. 예: "을지로3가점", "강남점" 등',
+        },
+        contract_classification: {
+          type: 'string',
+          enum: ['정직원', '파트타이머'],
+          description: '계약 분류 필터 (정직원 또는 파트타이머)',
+        },
+        date_range: {
+          type: 'string',
+          enum: ['today', 'yesterday', 'this_week', 'last_week', 'this_month', 'last_month', 'custom'],
+          description: '조회 기간. today=오늘, yesterday=어제, this_week=이번주, last_week=지난주, this_month=이번달, last_month=지난달, custom=사용자 지정 기간',
+        },
+        start_date: {
+          type: 'string',
+          description: 'date_range가 custom일 때 시작 날짜. YYYY-MM-DD 형식 (예: 2025-01-01)',
+        },
+        end_date: {
+          type: 'string',
+          description: 'date_range가 custom일 때 종료 날짜. YYYY-MM-DD 형식 (예: 2025-01-31)',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'get_employee_payslip',
+    description: '직원의 급여명세서를 조회합니다. "홍길동 급여명세서", "11월 급여명세서", "이번달 급여", "지난달 급여", "실수령액 알려줘", "총 지급액", "공제내역" 같은 요청에 사용합니다. 급여명세서에는 기본급, 각종 수당, 4대보험, 세금, 총 지급액, 총 공제액, 실수령액 정보가 포함됩니다.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        employee_name: {
+          type: 'string',
+          description: '특정 직원 이름으로 검색 (예: "홍길동")',
+        },
+        employee_id: {
+          type: 'number',
+          description: '특정 직원 ID로 검색',
+        },
+        pay_year_month: {
+          type: 'string',
+          description: '급여 년월 (예: "2024-11"). YYYY-MM 형식. 특정 월 급여명세서 조회 시 사용.',
+        },
+        date_range: {
+          type: 'string',
+          enum: ['this_month', 'last_month', 'custom'],
+          description: '조회 기간. this_month=이번달, last_month=지난달, custom=사용자 지정',
         },
       },
       required: [],
@@ -447,6 +518,9 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       if (toolInput.employment_status) {
         query = query.eq('employment_status', toolInput.employment_status);
       }
+      if (toolInput.workplace_name) {
+        query = query.ilike('workplace_name', `%${toolInput.workplace_name}%`);
+      }
       if (toolInput.search) {
         query = query.or(`name.ilike.%${toolInput.search}%,employee_id.ilike.%${toolInput.search}%`);
       }
@@ -593,10 +667,10 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
       // 각 직원의 급여 정보 조회
       const salaryResults = [];
       for (const emp of employees) {
-        // 해당 직원의 근로계약서 조회
+        // 해당 직원의 근로계약서 조회 (근로계약서의 상세 정보 포함)
         let contractQuery = supabase
           .from('employment_contracts')
-          .select('id, store_name, contract_status, salary_type')
+          .select('id, store_name, contract_status, salary_type, contract_start_date, contract_end_date, work_start_date, pay_cycle, pay_day, job_description')
           .eq('employee_id', emp.id)
           .or('is_deleted.eq.false,is_deleted.is.null');
 
@@ -620,12 +694,41 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
                   employee_name: emp.name,
                   contract_classification: emp.contract_classification,
                   workplace: emp.workplace_name,
+                  // 근로계약서 정보
+                  contract_status: contract.contract_status,
+                  contract_start_date: contract.contract_start_date,
+                  contract_end_date: contract.contract_end_date,
+                  work_start_date: contract.work_start_date,
+                  pay_cycle: contract.pay_cycle,
+                  pay_day: contract.pay_day,
+                  job_description: contract.job_description,
+                  // 급여 정보
                   salary_type: contract.salary_type,
                   annual_salary: salary.annual_salary ? Number(salary.annual_salary) : null,
                   monthly_salary: salary.monthly_salary ? Number(salary.monthly_salary) : null,
                   hourly_wage: salary.hourly_wage ? Number(salary.hourly_wage) : null,
                 });
               }
+            } else {
+              // 급여 정보가 없어도 근로계약서 정보는 포함
+              salaryResults.push({
+                employee_name: emp.name,
+                contract_classification: emp.contract_classification,
+                workplace: emp.workplace_name,
+                // 근로계약서 정보
+                contract_status: contract.contract_status,
+                contract_start_date: contract.contract_start_date,
+                contract_end_date: contract.contract_end_date,
+                work_start_date: contract.work_start_date,
+                pay_cycle: contract.pay_cycle,
+                pay_day: contract.pay_day,
+                job_description: contract.job_description,
+                // 급여 정보 없음
+                salary_type: contract.salary_type,
+                annual_salary: null,
+                monthly_salary: null,
+                hourly_wage: null,
+              });
             }
           }
         }
@@ -633,7 +736,7 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
 
       if (salaryResults.length === 0) {
         return JSON.stringify({
-          error: '해당 직원의 급여 정보가 없습니다.',
+          error: '해당 직원의 근로계약서 정보가 없습니다.',
           dataType: 'not_found'
         });
       }
@@ -726,6 +829,305 @@ async function executeTool(toolName: string, toolInput: Record<string, unknown>)
         message: workingEmployees.length > 0
           ? `${currentUser.storeName}에 현재 ${workingEmployees.length}명이 근무 중입니다.`
           : `${currentUser.storeName}에 오늘(${todayStr}) 현재 근무 중인 직원이 없습니다.`
+      });
+    }
+
+    case 'get_employee_work_hours': {
+      // 날짜 범위 계산 (한국 시간 기준)
+      const now = new Date();
+      const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+      const todayStr = koreaTime.toISOString().split('T')[0];
+      const currentYear = koreaTime.getFullYear();
+
+      let startDate: string;
+      let endDate: string;
+      const dateRange = (toolInput.date_range as string) || 'today';
+
+      switch (dateRange) {
+        case 'today':
+          startDate = todayStr;
+          endDate = todayStr;
+          break;
+        case 'yesterday': {
+          const yesterday = new Date(koreaTime);
+          yesterday.setDate(yesterday.getDate() - 1);
+          startDate = yesterday.toISOString().split('T')[0];
+          endDate = startDate;
+          break;
+        }
+        case 'this_week': {
+          const weekStart = new Date(koreaTime);
+          weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+          startDate = weekStart.toISOString().split('T')[0];
+          endDate = todayStr;
+          break;
+        }
+        case 'last_week': {
+          const lastWeekEnd = new Date(koreaTime);
+          lastWeekEnd.setDate(lastWeekEnd.getDate() - lastWeekEnd.getDay() - 1);
+          const lastWeekStart = new Date(lastWeekEnd);
+          lastWeekStart.setDate(lastWeekStart.getDate() - 6);
+          startDate = lastWeekStart.toISOString().split('T')[0];
+          endDate = lastWeekEnd.toISOString().split('T')[0];
+          break;
+        }
+        case 'this_month': {
+          const monthStart = new Date(koreaTime.getFullYear(), koreaTime.getMonth(), 1);
+          startDate = monthStart.toISOString().split('T')[0];
+          endDate = todayStr;
+          break;
+        }
+        case 'last_month': {
+          const lastMonthEnd = new Date(koreaTime.getFullYear(), koreaTime.getMonth(), 0);
+          const lastMonthStart = new Date(koreaTime.getFullYear(), koreaTime.getMonth() - 1, 1);
+          startDate = lastMonthStart.toISOString().split('T')[0];
+          endDate = lastMonthEnd.toISOString().split('T')[0];
+          break;
+        }
+        case 'custom': {
+          const fixDateFormat = (dateStr: string): string => {
+            if (!dateStr) return todayStr;
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+            if (/^\d{2}-\d{2}$/.test(dateStr)) return `${currentYear}-${dateStr}`;
+            const parts = dateStr.split('-');
+            if (parts.length === 2) {
+              const month = parts[0].padStart(2, '0');
+              const day = parts[1].padStart(2, '0');
+              return `${currentYear}-${month}-${day}`;
+            }
+            return todayStr;
+          };
+          startDate = fixDateFormat(toolInput.start_date as string);
+          endDate = fixDateFormat(toolInput.end_date as string);
+          break;
+        }
+        default:
+          startDate = todayStr;
+          endDate = todayStr;
+      }
+
+      // 직원 조회
+      let employeeQuery = supabase
+        .from('employees')
+        .select('id, name, contract_classification, workplace_name')
+        .eq('is_deleted', false);
+
+      if (toolInput.employee_name) {
+        employeeQuery = employeeQuery.ilike('name', `%${toolInput.employee_name}%`);
+      }
+      if (toolInput.employee_id) {
+        employeeQuery = employeeQuery.eq('id', toolInput.employee_id);
+      }
+      if (toolInput.workplace_name) {
+        employeeQuery = employeeQuery.ilike('workplace_name', `%${toolInput.workplace_name}%`);
+      }
+      if (toolInput.contract_classification) {
+        employeeQuery = employeeQuery.eq('contract_classification', toolInput.contract_classification);
+      }
+
+      const { data: employees, error: empError } = await employeeQuery;
+      if (empError) return JSON.stringify({ error: empError.message });
+      if (!employees || employees.length === 0) {
+        return JSON.stringify({ error: '해당 직원을 찾을 수 없습니다.', dataType: 'not_found' });
+      }
+
+      // 각 직원의 근무시간 계산
+      const workHoursResults = [];
+      for (const emp of employees) {
+        // 출퇴근 기록 조회
+        let recordsQuery = supabase
+          .from('attendance_records')
+          .select('id, work_date, total_work_minutes')
+          .eq('employee_id', emp.id)
+          .gte('work_date', startDate)
+          .lte('work_date', endDate)
+          .or('is_deleted.eq.false,is_deleted.is.null');
+
+        const { data: records, error: recordsError } = await recordsQuery;
+        if (recordsError) continue;
+
+        if (records && records.length > 0) {
+          // 총 근무시간 계산 (분 단위)
+          const totalMinutes = records.reduce((sum, record) => {
+            return sum + (record.total_work_minutes || 0);
+          }, 0);
+
+          // 시간으로 변환
+          const hours = Math.floor(totalMinutes / 60);
+          const minutes = totalMinutes % 60;
+
+          workHoursResults.push({
+            employee_name: emp.name,
+            contract_classification: emp.contract_classification,
+            workplace: emp.workplace_name,
+            start_date: startDate,
+            end_date: endDate,
+            total_work_minutes: totalMinutes,
+            total_work_hours: hours,
+            total_work_minutes_remainder: minutes,
+            work_days: records.length,
+            formatted_hours: minutes > 0 ? `${hours}시간 ${minutes}분` : `${hours}시간`,
+          });
+        } else {
+          // 출퇴근 기록이 없는 경우
+          workHoursResults.push({
+            employee_name: emp.name,
+            contract_classification: emp.contract_classification,
+            workplace: emp.workplace_name,
+            start_date: startDate,
+            end_date: endDate,
+            total_work_minutes: 0,
+            total_work_hours: 0,
+            total_work_minutes_remainder: 0,
+            work_days: 0,
+            formatted_hours: '0시간',
+          });
+        }
+      }
+
+      if (workHoursResults.length === 0) {
+        return JSON.stringify({
+          error: '해당 기간의 출퇴근 기록이 없습니다.',
+          dataType: 'not_found'
+        });
+      }
+
+      // 기간 표시 문자열 생성
+      let periodLabel = '';
+      switch (dateRange) {
+        case 'today': periodLabel = '오늘'; break;
+        case 'yesterday': periodLabel = '어제'; break;
+        case 'this_week': periodLabel = '이번 주'; break;
+        case 'last_week': periodLabel = '지난 주'; break;
+        case 'this_month': periodLabel = '이번 달'; break;
+        case 'last_month': periodLabel = '지난 달'; break;
+        default: periodLabel = `${startDate} ~ ${endDate}`;
+      }
+
+      return JSON.stringify({
+        data: workHoursResults,
+        count: workHoursResults.length,
+        period: periodLabel,
+        start_date: startDate,
+        end_date: endDate,
+        dataType: 'work_hours',
+        message: `근무시간 정보입니다.`
+      });
+    }
+
+    case 'get_employee_payslip': {
+      // 급여 년월 결정 (한국 시간 기준)
+      const now = new Date();
+      const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+      const currentYear = koreaTime.getFullYear();
+      const currentMonth = koreaTime.getMonth() + 1;
+
+      let payYearMonth: string;
+      const dateRange = toolInput.date_range as string | undefined;
+
+      if (toolInput.pay_year_month) {
+        payYearMonth = toolInput.pay_year_month as string;
+      } else if (dateRange === 'this_month') {
+        payYearMonth = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+      } else if (dateRange === 'last_month') {
+        const lastMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+        const year = currentMonth === 1 ? currentYear - 1 : currentYear;
+        payYearMonth = `${year}-${String(lastMonth).padStart(2, '0')}`;
+      } else {
+        // 기본값: 가장 최근 급여명세서
+        payYearMonth = '';
+      }
+
+      // 직원 필터링
+      let employeeIds: number[] = [];
+      if (toolInput.employee_name || toolInput.employee_id) {
+        let empQuery = supabase
+          .from('employees')
+          .select('id, name')
+          .eq('is_deleted', false);
+
+        if (toolInput.employee_name) {
+          empQuery = empQuery.ilike('name', `%${toolInput.employee_name}%`);
+        }
+        if (toolInput.employee_id) {
+          empQuery = empQuery.eq('id', toolInput.employee_id);
+        }
+
+        const { data: employees } = await empQuery;
+        if (employees && employees.length > 0) {
+          employeeIds = employees.map(e => e.id);
+        } else {
+          return JSON.stringify({
+            error: '해당 직원을 찾을 수 없습니다.',
+            dataType: 'not_found'
+          });
+        }
+      }
+
+      // 급여명세서 조회
+      let payslipQuery = supabase
+        .from('payslips')
+        .select('*')
+        .eq('is_deleted', false)
+        .order('pay_year_month', { ascending: false });
+
+      if (employeeIds.length > 0) {
+        payslipQuery = payslipQuery.in('employee_id', employeeIds);
+      }
+
+      if (payYearMonth) {
+        payslipQuery = payslipQuery.eq('pay_year_month', payYearMonth);
+      }
+
+      const { data: payslips, error } = await payslipQuery.limit(10);
+
+      if (error) return JSON.stringify({ error: error.message });
+
+      if (!payslips || payslips.length === 0) {
+        return JSON.stringify({
+          error: '해당 조건의 급여명세서가 없습니다.',
+          dataType: 'not_found'
+        });
+      }
+
+      // 결과 포맷팅
+      const formattedPayslips = payslips.map(p => ({
+        employee_name: p.employee_name,
+        employee_classification: p.employee_classification,
+        store_name: p.store_name,
+        pay_year_month: p.pay_year_month,
+        pay_date: p.pay_date,
+        settlement_period: `${p.settlement_start_date} ~ ${p.settlement_end_date}`,
+        // 지급 항목
+        base_salary: Number(p.base_salary) || 0,
+        meal_allowance: Number(p.meal_allowance) || 0,
+        car_allowance: Number(p.car_allowance) || 0,
+        childcare_allowance: Number(p.childcare_allowance) || 0,
+        overtime_allowance: Number(p.overtime_allowance) || 0,
+        night_allowance: Number(p.night_allowance) || 0,
+        holiday_allowance: Number(p.holiday_allowance) || 0,
+        extra_work_allowance: Number(p.extra_work_allowance) || 0,
+        position_bonus: Number(p.position_bonus) || 0,
+        incentive: Number(p.incentive) || 0,
+        // 공제 항목
+        national_pension: Number(p.national_pension) || 0,
+        health_insurance: Number(p.health_insurance) || 0,
+        long_term_care_insurance: Number(p.long_term_care_insurance) || 0,
+        employment_insurance: Number(p.employment_insurance) || 0,
+        income_tax: Number(p.income_tax) || 0,
+        local_income_tax: Number(p.local_income_tax) || 0,
+        // 합계
+        total_payment: Number(p.total_payment) || 0,
+        total_deduction: Number(p.total_deduction) || 0,
+        net_payment: Number(p.net_payment) || 0,
+      }));
+
+      return JSON.stringify({
+        data: formattedPayslips,
+        count: formattedPayslips.length,
+        pay_year_month: payYearMonth || '전체',
+        dataType: 'payslip',
+        message: `급여명세서 정보입니다.`
       });
     }
 
@@ -1064,7 +1466,9 @@ ${userContext}
 - Business Partner(BP/거래처/파트너) 목록 조회, 상세 정보 조회, 개수 확인
 - 직원 목록 조회, 상세 정보 조회, 개수 확인 (계약분류, 소속분류, 근무상태별)
 - 직원 근무 스케줄(근무요일, 근무시간) 조회
-- 직원 급여 정보(연봉, 월급, 시급) 조회
+- 직원 급여 정보(연봉, 월급, 시급) 조회 - **근로계약서 내용을 참조하여 계약 상태, 계약 기간, 급여 지급 주기, 업무 설명 등도 함께 제공**
+- **직원 급여명세서 조회 - 급여명세서(payslips) 데이터를 기준으로 기본급, 각종 수당, 4대보험, 세금, 총 지급액, 총 공제액, 실수령액 정보 제공**
+- 직원 실제 근무시간 조회 - **출퇴근 데이터를 기반으로 실제 근무시간 계산 (오늘/어제/이번주/지난주/이번달/지난달)**
 - 현재 근무 중인 직원 조회 (오늘 출근 후 아직 퇴근하지 않은 직원)
 - 매장(점포) 목록 조회, 상세 정보 조회, 개수 확인
 - 메뉴 정보 조회
@@ -1074,14 +1478,28 @@ ${userContext}
 ## 처리할 수 없는 요청
 위에 명시된 "당신이 할 수 있는 일" 이외의 요청에 대해서는 반드시 "해당 요청은 처리할 수 없습니다."라고만 응답하세요. 추가 설명이나 지원 가능한 업무 목록을 나열하지 마세요.
 
-## 응답 규칙
-- 답변은 항상 친절하고 간결하게 한국어로 해주세요.
-- 숫자나 데이터를 말할 때는 명확하게 표현해주세요.
-- 목록 데이터를 보여줄 때는 표 형식으로 깔끔하게 정리해주세요.
-- 상세 정보를 보여줄 때는 주요 필드를 구분하여 보기 쉽게 표현해주세요.
+**중요**: 도구 실행 결과에 에러가 있거나 "처리할 수 없습니다"라는 메시지가 있으면, 즉시 사용자에게 "해당 요청은 처리할 수 없습니다."라고 응답하고 끝내세요. 추가 도구를 사용하거나 계속 시도하지 마세요.
 
-## 데이터 표시 형식
-목록 조회 시 다음과 같은 마크다운 테이블 형식으로 보여주세요:
+## 응답 규칙 (매우 중요!)
+**모든 응답은 반드시 단답형으로 작성하세요.**
+
+### 단답형 응답 원칙
+- 불필요한 설명, 서론, 예의 표현 없이 핵심 정보만 간결하게 전달
+- 질문에 대한 직접적인 답변만 제공
+- 예: "을지로3가점 직원은 총 5명입니다." (O)
+- 예: "안녕하세요. 을지로3가점의 직원 정보를 조회해드리겠습니다. 총 5명의 직원이 있습니다." (X)
+- 숫자나 데이터를 말할 때는 명확하게 표현하되, 불필요한 수식어는 제거하세요
+
+### 목록 응답 형식 (중요!)
+**특별한 주문이 없다면 표 형식을 사용하지 말고 간단하게 나열하세요.**
+
+- 직원이 누군지 묻는 요청: 이름만 나열 (예: "홍길동, 김철수, 이영희")
+- 목록 조회 요청: 해당 내용만 간단히 나열 (예: "강남점, 을지로3가점, 신촌점")
+- 사용자가 명시적으로 "표로 보여줘", "상세하게 보여줘" 같은 요청을 할 때만 표 형식 사용
+- 기본적으로는 콤마로 구분된 간단한 나열 방식 사용
+
+## 데이터 표시 형식 (표 형식은 사용자가 명시적으로 요청할 때만 사용)
+사용자가 "표로 보여줘", "상세하게 보여줘" 같은 명시적 요청을 할 때만 다음과 같은 마크다운 테이블 형식으로 보여주세요:
 
 ### 직원 목록 예시
 | 이름 | 직원번호 | 직책 | 소속 | 근무상태 |
@@ -1114,16 +1532,44 @@ ${userContext}
 - EVERY_OTHER_WEEK: 격주
 
 ### 급여 정보 예시
-| 직원명 | 근무지 | 급여유형 | 연봉 | 월급 | 시급 |
-|--------|--------|---------|------|------|------|
-| 홍길동 | 강남점 | 연봉제 | 45,000,000원 | 3,750,000원 | 12,360원 |
+급여 관련 요청 시 근로계약서의 내용을 참조하여 답변하세요. 근로계약서에는 계약 상태, 계약 기간, 급여 지급 주기, 업무 설명 등의 정보가 포함되어 있습니다.
+
+사용자가 "표로 보여줘" 같은 명시적 요청을 할 때만 표 형식 사용:
+| 직원명 | 근무지 | 급여유형 | 연봉 | 월급 | 시급 | 계약상태 | 계약기간 | 급여지급주기 |
+|--------|--------|---------|------|------|------|---------|---------|------------|
+| 홍길동 | 강남점 | 연봉제 | 45,000,000원 | 3,750,000원 | 12,360원 | 계약중 | 2024-01-01 ~ 2024-12-31 | 월 1회 |
+
+기본적으로는 간단하게 나열:
+- "홍길동: 연봉제, 연봉 45,000,000원, 계약중 (2024-01-01 ~ 2024-12-31), 월 1회 지급"
 
 급여유형(salary_type) 값 설명:
 - ANNUAL: 연봉제
 - MONTHLY: 월급제
 - HOURLY: 시급제
 
+계약 상태(contract_status) 값 설명:
+- 계약중, 계약만료, 계약해지 등
+
 금액 표시 시 천 단위 콤마를 사용하고 '원'을 붙여주세요.
+
+### 급여명세서 응답 형식 (중요!)
+급여명세서 관련 요청("급여명세서 보여줘", "실수령액 알려줘", "11월 급여", "이번달 급여" 등)은 반드시 급여명세서(payslips) 데이터를 기준으로 응답하세요.
+
+**단일 직원 급여명세서 (기본 형식):**
+- "홍길동님 2024년 11월 급여: 총 지급액 3,683,333원, 총 공제액 418,960원, 실수령액 3,264,373원"
+
+**상세 정보 요청 시:**
+- 지급 항목: 기본급, 식대, 연장근무수당, 야간근무수당, 휴일근무수당 등
+- 공제 항목: 국민연금, 건강보험, 장기요양보험, 고용보험, 소득세, 지방소득세
+- 합계: 총 지급액, 총 공제액, 실수령액
+
+**여러 직원 급여명세서 간단 나열:**
+- "홍길동: 실수령액 3,264,373원, 김철수: 실수령액 3,695,350원"
+
+**표 형식 (사용자가 명시적으로 요청할 때만):**
+| 직원명 | 기본급 | 식대 | 총 지급액 | 총 공제액 | 실수령액 |
+|--------|--------|------|-----------|-----------|----------|
+| 홍길동 | 3,333,333원 | 200,000원 | 3,683,333원 | 418,960원 | 3,264,373원 |
 
 ### 현재 근무 중인 직원 예시
 | 직원명 | 계약분류 | 근무지 | 출근시간 | 연락처 |
@@ -1131,6 +1577,13 @@ ${userContext}
 | 김철수 | 정직원 | 강남점 | 09:00 | 010-1234-5678 |
 
 현재 근무 중인 직원은 오늘 출근했지만 아직 퇴근 기록이 없는 직원입니다.
+
+### 근무시간 응답 형식 (중요!)
+근무시간 관련 요청에는 출퇴근 데이터를 기반으로 계산한 실제 근무시간을 제공하세요:
+- 단일 직원: "홍길동 이번주 근무시간은 40시간입니다."
+- 여러 직원: "홍길동: 40시간, 김철수: 35시간, 이영희: 38시간"
+- 기간별: "이번달 근무시간은 160시간입니다."
+- 특별한 주문이 없다면 표 형식 사용하지 말고 간단히 나열하세요.
 
 ### 일 매출 응답 형식 (중요!)
 오늘/어제/특정일 매출을 묻는 질문에는 **반드시** 아래 형식으로 간단하게 답변하세요:
@@ -1169,8 +1622,13 @@ ${userContext}
       messages,
     });
 
-    // 도구 사용이 필요한 경우 처리
-    while (response.stop_reason === 'tool_use') {
+    // 도구 사용이 필요한 경우 처리 (최대 5회 반복 제한)
+    let toolUseCount = 0;
+    const maxToolUseIterations = 5;
+    
+    while (response.stop_reason === 'tool_use' && toolUseCount < maxToolUseIterations) {
+      toolUseCount++;
+      
       // 모든 tool_use 블록 찾기
       const toolUseBlocks = response.content.filter(
         (block): block is Anthropic.ToolUseBlock => block.type === 'tool_use'
@@ -1181,17 +1639,46 @@ ${userContext}
       // 모든 도구 병렬 실행
       const toolResults = await Promise.all(
         toolUseBlocks.map(async (toolUseBlock) => {
-          const result = await executeTool(
-            toolUseBlock.name,
-            toolUseBlock.input as Record<string, unknown>
-          );
-          return {
-            type: 'tool_result' as const,
-            tool_use_id: toolUseBlock.id,
-            content: result,
-          };
+          try {
+            const result = await executeTool(
+              toolUseBlock.name,
+              toolUseBlock.input as Record<string, unknown>
+            );
+            return {
+              type: 'tool_result' as const,
+              tool_use_id: toolUseBlock.id,
+              content: result,
+            };
+          } catch (error) {
+            console.error(`Tool execution error for ${toolUseBlock.name}:`, error);
+            return {
+              type: 'tool_result' as const,
+              tool_use_id: toolUseBlock.id,
+              content: JSON.stringify({ 
+                error: `도구 실행 중 오류가 발생했습니다: ${error instanceof Error ? error.message : String(error)}` 
+              }),
+            };
+          }
         })
       );
+
+      // 도구 실행 결과에 에러나 "처리할 수 없습니다" 메시지가 있는지 확인
+      let shouldStopEarly = false;
+      for (const toolResult of toolResults) {
+        try {
+          const resultData = JSON.parse(toolResult.content);
+          // 에러가 있거나, 처리할 수 없다는 메시지가 있으면 즉시 종료
+          if (resultData.error || 
+              (typeof resultData.message === 'string' && 
+               (resultData.message.includes('처리할 수 없') || 
+                resultData.message.includes('알 수 없는 도구')))) {
+            shouldStopEarly = true;
+            break;
+          }
+        } catch {
+          // JSON 파싱 실패 시 무시 (일반 텍스트 응답일 수 있음)
+        }
+      }
 
       // 도구 결과와 함께 다시 API 호출
       messages.push({ role: 'assistant', content: response.content });
@@ -1200,12 +1687,40 @@ ${userContext}
         content: toolResults,
       });
 
+      try {
+        response = await anthropic.messages.create({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1024,
+          system: systemPrompt,
+          tools,
+          messages,
+        });
+
+        // 처리할 수 없는 요청이면 즉시 종료
+        if (shouldStopEarly) {
+          break;
+        }
+      } catch (error) {
+        console.error('Anthropic API error during tool use:', error);
+        throw error;
+      }
+    }
+
+    // 도구 사용 횟수 초과 시 경고
+    if (toolUseCount >= maxToolUseIterations && response.stop_reason === 'tool_use') {
+      console.warn('Maximum tool use iterations reached');
+      // 강제로 응답 생성
       response = await anthropic.messages.create({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1024,
-        system: systemPrompt,
-        tools,
-        messages,
+        system: systemPrompt + '\n\n중요: 도구 사용 횟수가 초과되었습니다. 사용자에게 "죄송합니다. 요청을 처리하는데 시간이 너무 오래 걸렸습니다. 다시 시도해주세요."라고 응답하세요.',
+        messages: [
+          ...messages,
+          {
+            role: 'user',
+            content: '도구 사용 횟수가 초과되었습니다. 사용자에게 간단히 사과 메시지를 전달하세요.',
+          },
+        ],
       });
     }
 
